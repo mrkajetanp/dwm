@@ -22,14 +22,6 @@ index 4465af1..1719b36 100644
  static void focus(Client *c);
  static void focusin(XEvent *e);
  static void focusmon(const Arg *arg);
-@@ -235,6 +236,7 @@ static int xerrorstart(Display *dpy, XErrorEvent *ee);
- static void zoom(const Arg *arg);
- 
- /* variables */
-+static Client *prevzoom = NULL;
- static const char broken[] = "broken";
- static char stext[256];
- static int screen;
 @@ -780,6 +782,16 @@ expose(XEvent *e)
  		drawbar(m);
  }
