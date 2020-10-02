@@ -89,6 +89,8 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *rofiruncmd[] = { "rofi", "-show", "run", "-font", "Noto Sans 12", "-theme", "materia", NULL };
 static const char *rofidruncmd[] = { "rofi", "-show", "drun", "-font", "Noto Sans 12", "-theme", "materia", NULL };
 static const char *termcmd[]  = { "st", NULL };
+static const char scratchpadname[] = "scratchpad";
+static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -143,6 +145,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Left,   tagtoleft,      {0} },
 	{ MODKEY|ShiftMask,             XK_Right,  tagtoright,     {0} },
 	{ MODKEY,                       XK_s,      togglesticky,   {0} },
+	{ MODKEY,                       XK_dollar,  togglescratch,  {.v = scratchpadcmd } },
 	TAGKEYS(                        XK_ampersand,                      0)
 	TAGKEYS(                        XK_bracketleft,                      1)
 	TAGKEYS(                        XK_braceleft,                      2)
