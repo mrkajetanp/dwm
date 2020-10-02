@@ -141,6 +141,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Right,  viewtoright,    {0} },
 	{ MODKEY|ShiftMask,             XK_Left,   tagtoleft,      {0} },
 	{ MODKEY|ShiftMask,             XK_Right,  tagtoright,     {0} },
+	{ MODKEY,                       XK_s,      togglesticky,   {0} },
 	TAGKEYS(                        XK_ampersand,                      0)
 	TAGKEYS(                        XK_bracketleft,                      1)
 	TAGKEYS(                        XK_braceleft,                      2)

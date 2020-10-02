@@ -1,0 +1,28 @@
+diff --git a/dwm.c b/dwm.c
+index 0362114..0ef5c7f 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -211,6 +211,7 @@ static void tagmon(const Arg *arg);
+ static void tile(Monitor *);
+ static void togglebar(const Arg *arg);
+ static void togglefloating(const Arg *arg);
++static void togglesticky(const Arg *arg);
+ static void toggletag(const Arg *arg);
+ static void toggleview(const Arg *arg);
+ static void unfocus(Client *c, int setfocus);
+@@ -1713,6 +1714,15 @@ togglefloating(const Arg *arg)
+ }
+ 
+ void
++togglesticky(const Arg *arg)
++{
++	if (!selmon->sel)
++		return;
++	selmon->sel->issticky = !selmon->sel->issticky;
++	arrange(selmon);
++}
++
++void
+ toggletag(const Arg *arg)
+ {
+ 	unsigned int newtags;
