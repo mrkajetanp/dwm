@@ -12,15 +12,6 @@ diff --git a/dwm.c b/dwm.c
 index 9fd0286..be01927 100644
 --- a/dwm.c
 +++ b/dwm.c
-@@ -235,6 +235,8 @@ static int xerrordummy(Display *dpy, XErrorEvent *ee);
- static int xerrorstart(Display *dpy, XErrorEvent *ee);
- static void zoom(const Arg *arg);
- 
-+static void focusmaster(const Arg *arg);
-+
- /* variables */
- static const char broken[] = "broken";
- static char stext[256];
 @@ -2150,3 +2152,17 @@ main(int argc, char *argv[])
  	XCloseDisplay(dpy);
  	return EXIT_SUCCESS;

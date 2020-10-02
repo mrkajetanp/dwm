@@ -253,6 +253,7 @@ static int xerror(Display *dpy, XErrorEvent *ee);
 static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void zoom(const Arg *arg);
+static void focusmaster(const Arg *arg);
 
 static pid_t getparentprocess(pid_t p);
 static int isdescprocess(pid_t p, pid_t c);
@@ -3187,4 +3188,16 @@ void tatami(Monitor *m) {
 		resize(c, tnx, tny, tnw - 2 * c->bw, tnh - 2 * c->bw, False);
 		}
 	}
+}
+
+void focusmaster(const Arg *arg) {
+	Client *c;
+
+	if (selmon->nmaster < 1)
+		return;
+
+	c = nexttiled(selmon->clients);
+
+	if (c)
+		focus(c);
 }
