@@ -11,14 +11,6 @@ diff --git a/dwm.c b/dwm.c
 index 4465af1..92022a1 100644
 --- a/dwm.c
 +++ b/dwm.c
-@@ -55,6 +55,7 @@
- #define WIDTH(X)                ((X)->w + 2 * (X)->bw)
- #define HEIGHT(X)               ((X)->h + 2 * (X)->bw)
- #define TAGMASK                 ((1 << LENGTH(tags)) - 1)
-+#define TAGSLENGTH              (LENGTH(tags))
- #define TEXTW(X)                (drw_fontset_getwidth(drw, (X)) + lrpad)
- 
- /* enums */
 @@ -62,7 +63,7 @@ enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
  enum { SchemeNorm, SchemeSel }; /* color schemes */
  enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
@@ -28,30 +20,6 @@ index 4465af1..92022a1 100644
  enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms */
  enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
         ClkClientWin, ClkRootWin, ClkLast }; /* clicks */
-@@ -197,11 +198,15 @@ static void scan(void);
- static int sendevent(Client *c, Atom proto);
- static void sendmon(Client *c, Monitor *m);
- static void setclientstate(Client *c, long state);
-+static void setcurrentdesktop(void);
-+static void setdesktopnames(void);
- static void setfocus(Client *c);
- static void setfullscreen(Client *c, int fullscreen);
- static void setlayout(const Arg *arg);
- static void setmfact(const Arg *arg);
-+static void setnumdesktops(void);
- static void setup(void);
-+static void setviewport(void);
- static void seturgent(Client *c, int urg);
- static void showhide(Client *c);
- static void sigchld(int unused);
-@@ -216,6 +221,7 @@ static void toggleview(const Arg *arg);
- static void unfocus(Client *c, int setfocus);
- static void unmanage(Client *c, int destroyed);
- static void unmapnotify(XEvent *e);
-+static void updatecurrentdesktop(void);
- static void updatebarpos(Monitor *m);
- static void updatebars(void);
- static void updateclientlist(void);
 @@ -1431,6 +1437,16 @@ setclientstate(Client *c, long state)
  	XChangeProperty(dpy, c->win, wmatom[WMState], wmatom[WMState], 32,
  		PropModeReplace, (unsigned char *)data, 2);
@@ -148,14 +116,6 @@ index 4465af1..92022a1 100644
  
  int
  updategeom(void)
-@@ -2042,6 +2088,7 @@ view(const Arg *arg)
- 		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
- 	focus(NULL);
- 	arrange(selmon);
-+	updatecurrentdesktop();
- }
- 
- Client *
--- 
+--
 2.21.0
 
