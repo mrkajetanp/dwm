@@ -1,5 +1,4 @@
 /* See LICENSE file for copyright and license details. */
-#include "selfrestart.c"
 
 /* appearance */
 static const unsigned int borderpx  = 4;        /* border pixel of windows */
@@ -83,7 +82,6 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_d,      spawn,          {.v = rofiruncmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
-	{ MODKEY|ShiftMask,             XK_r,      self_restart,      {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -125,7 +123,8 @@ static Key keys[] = {
 	TAGKEYS(                        XK_plus,                      8)
 	TAGKEYS(                        XK_bracketright,                      9)
 	{ MODKEY,                       XK_x,      killclient,     {0} },
-	{ MODKEY|ShiftMask,             XK_x,      quit,           {0} },
+	{ MODKEY|ShiftMask, XK_x,      quit,           {0} },
+	{ MODKEY|ShiftMask,             XK_r,      quit,      {1} },
 };
 
 /* button definitions */
