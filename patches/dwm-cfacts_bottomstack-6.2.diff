@@ -25,15 +25,6 @@ Only in b: dwm-bottomstack-20160719-56a31dc.diff
 diff -up a/dwm.c b/dwm.c
 --- a/dwm.c	2019-06-06 21:23:27.023328450 +0200
 +++ b/dwm.c	2019-06-06 21:31:38.133319129 +0200
-@@ -235,6 +235,8 @@ static int xerror(Display *dpy, XErrorEv
- static int xerrordummy(Display *dpy, XErrorEvent *ee);
- static int xerrorstart(Display *dpy, XErrorEvent *ee);
- static void zoom(const Arg *arg);
-+static void bstack(Monitor *m);
-+static void bstackhoriz(Monitor *m);
- 
- /* variables */
- static const char broken[] = "broken";
 @@ -2175,3 +2177,87 @@ main(int argc, char *argv[])
  	XCloseDisplay(dpy);
  	return EXIT_SUCCESS;
