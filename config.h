@@ -57,6 +57,7 @@ static const Layout layouts[] = {
 	{ "(Centered (F))",      centeredfloatingmaster },
 	{ "(Deck)",      deck },
 	{ "(Grid)",      grid },
+	{ "(Tatami)",      tatami },
 };
 
 /* key definitions */
@@ -106,6 +107,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_n,      setlayout,      {.v = &layouts[6]} },
 	{ MODKEY,                       XK_r,      setlayout,      {.v = &layouts[7]} },
 	{ MODKEY,                       XK_g,      setlayout,      {.v = &layouts[8]} },
+	{ MODKEY|ShiftMask,             XK_t,      setlayout,      {.v = &layouts[9]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_numbersign,      view,           {.ui = ~0 } },
