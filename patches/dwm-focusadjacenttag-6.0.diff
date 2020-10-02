@@ -1,0 +1,54 @@
+diff -up a/dwm.1 b/dwm.1
+--- a/dwm.1	2014-06-23 18:04:29.532917821 +0200
++++ b/dwm.1	2014-06-23 21:52:54.095867809 +0200
+@@ -71,6 +71,18 @@ Send focused window to previous screen,
+ .B Mod1\-Shift\-.
+ Send focused window to next screen, if any.
+ .TP
++.B Mod1\-Right
++Focus tag on the right, if any.
++.TP
++.B Mod1\-Left
++Focus tag on the left, if any.
++.TP
++.B Mod1\-Shift\-Right
++Send focused window to tag on the right, if any.
++.TP
++.B Mod1\-Shift\-Left
++Send focused window to tag on the left, if any.
++.TP
+ .B Mod1\-b
+ Toggles bar on and off.
+ .TP
+diff -up a/dwm.c b/dwm.c
+--- a/dwm.c	2014-06-23 18:04:29.532917821 +0200
++++ b/dwm.c	2014-06-24 08:17:40.921714154 +0200
+@@ -2052,6 +2078,28 @@ view(const Arg *arg) {
+ 	arrange(selmon);
+ }
+ 
++void
++viewtoleft(const Arg *arg) {
++	if(__builtin_popcount(selmon->tagset[selmon->seltags] & TAGMASK) == 1
++	&& selmon->tagset[selmon->seltags] > 1) {
++		selmon->seltags ^= 1; /* toggle sel tagset */
++		selmon->tagset[selmon->seltags] = selmon->tagset[selmon->seltags ^ 1] >> 1;
++		focus(NULL);
++		arrange(selmon);
++	}
++}
++
++void
++viewtoright(const Arg *arg) {
++	if(__builtin_popcount(selmon->tagset[selmon->seltags] & TAGMASK) == 1
++	&& selmon->tagset[selmon->seltags] & (TAGMASK >> 1)) {
++		selmon->seltags ^= 1; /* toggle sel tagset */
++		selmon->tagset[selmon->seltags] = selmon->tagset[selmon->seltags ^ 1] << 1;
++		focus(NULL);
++		arrange(selmon);
++	}
++}
++
+ Client *
+ wintoclient(Window w) {
+ 	Client *c;
