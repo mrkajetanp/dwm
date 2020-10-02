@@ -37,7 +37,7 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
-	{ "Opera",    NULL,     NULL,           1 << 1,         1,          0,           0,        -1 },
+	{ "Opera",    NULL,     NULL,           1 << 1,         0,          0,           0,        -1 },
 	{ "Firefox", NULL,     NULL,           1 << 1,    0,          0,          -1,        -1 },
 	{ "Emacs", NULL,     NULL,           1 << 3,    0,          0,          -1,        -1 },
 	{ "st-256color",      NULL,     NULL,           0,         0,          1,           0,        -1 },
@@ -90,6 +90,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_j,      pushdown,     { 0 } },
+	{ MODKEY|ShiftMask,             XK_k,      pushup,     { 0 } },
 	{ MODKEY,                       XK_h,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_l,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
