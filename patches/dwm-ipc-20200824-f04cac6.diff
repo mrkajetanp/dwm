@@ -28,28 +28,6 @@ conflicts.
 For more info on the IPC implementation and how to send/receive
 messages, documentation can be found at
 https://github.com/mihirlad55/dwm-ipc
----
- IPCClient.c  |   66 +++
- IPCClient.h  |   61 +++
- Makefile     |   10 +-
- config.def.h |   18 +
- config.mk    |    8 +-
- dwm-msg.c    |  548 +++++++++++++++++++++++
- dwm.c        |  150 ++++++-
- ipc.c        | 1202 ++++++++++++++++++++++++++++++++++++++++++++++++++
- ipc.h        |  320 ++++++++++++++
- util.c       |  135 ++++++
- util.h       |   10 +
- yajl_dumps.c |  351 +++++++++++++++
- yajl_dumps.h |   65 +++
- 13 files changed, 2931 insertions(+), 13 deletions(-)
- create mode 100644 IPCClient.c
- create mode 100644 IPCClient.h
- create mode 100644 dwm-msg.c
- create mode 100644 ipc.c
- create mode 100644 ipc.h
- create mode 100644 yajl_dumps.c
- create mode 100644 yajl_dumps.h
 
 diff --git a/IPCClient.c b/IPCClient.c
 new file mode 100644
@@ -190,89 +168,6 @@ index 0000000..307dfba
 +IPCClient *ipc_list_get_client(IPCClientList list, int fd);
 +
 +#endif  // IPC_CLIENT_H_
-diff --git a/Makefile b/Makefile
-index 77bcbc0..0456754 100644
---- a/Makefile
-+++ b/Makefile
-@@ -6,7 +6,7 @@ include config.mk
- SRC = drw.c dwm.c util.c
- OBJ = ${SRC:.c=.o}
- 
--all: options dwm
-+all: options dwm dwm-msg
- 
- options:
- 	@echo dwm build options:
-@@ -25,8 +25,11 @@ config.h:
- dwm: ${OBJ}
- 	${CC} -o $@ ${OBJ} ${LDFLAGS}
- 
-+dwm-msg: dwm-msg.o
-+	${CC} -o $@ $< ${LDFLAGS}
-+
- clean:
--	rm -f dwm ${OBJ} dwm-${VERSION}.tar.gz
-+	rm -f dwm dwm-msg ${OBJ} dwm-${VERSION}.tar.gz
- 
- dist: clean
- 	mkdir -p dwm-${VERSION}
-@@ -38,8 +41,9 @@ dist: clean
- 
- install: all
- 	mkdir -p ${DESTDIR}${PREFIX}/bin
--	cp -f dwm ${DESTDIR}${PREFIX}/bin
-+	cp -f dwm dwm-msg ${DESTDIR}${PREFIX}/bin
- 	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm
-+	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm-msg
- 	mkdir -p ${DESTDIR}${MANPREFIX}/man1
- 	sed "s/VERSION/${VERSION}/g" < dwm.1 > ${DESTDIR}${MANPREFIX}/man1/dwm.1
- 	chmod 644 ${DESTDIR}${MANPREFIX}/man1/dwm.1
-diff --git a/config.def.h b/config.def.h
-index 1c0b587..059a831 100644
---- a/config.def.h
-+++ b/config.def.h
-@@ -113,3 +113,21 @@ static Button buttons[] = {
- 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
- };
- 
-+static const char *ipcsockpath = "/tmp/dwm.sock";
-+static IPCCommand ipccommands[] = {
-+  IPCCOMMAND(  view,                1,      {ARG_TYPE_UINT}   ),
-+  IPCCOMMAND(  toggleview,          1,      {ARG_TYPE_UINT}   ),
-+  IPCCOMMAND(  tag,                 1,      {ARG_TYPE_UINT}   ),
-+  IPCCOMMAND(  toggletag,           1,      {ARG_TYPE_UINT}   ),
-+  IPCCOMMAND(  tagmon,              1,      {ARG_TYPE_UINT}   ),
-+  IPCCOMMAND(  focusmon,            1,      {ARG_TYPE_SINT}   ),
-+  IPCCOMMAND(  focusstack,          1,      {ARG_TYPE_SINT}   ),
-+  IPCCOMMAND(  zoom,                1,      {ARG_TYPE_NONE}   ),
-+  IPCCOMMAND(  incnmaster,          1,      {ARG_TYPE_SINT}   ),
-+  IPCCOMMAND(  killclient,          1,      {ARG_TYPE_SINT}   ),
-+  IPCCOMMAND(  togglefloating,      1,      {ARG_TYPE_NONE}   ),
-+  IPCCOMMAND(  setmfact,            1,      {ARG_TYPE_FLOAT}  ),
-+  IPCCOMMAND(  setlayoutsafe,       1,      {ARG_TYPE_PTR}    ),
-+  IPCCOMMAND(  quit,                1,      {ARG_TYPE_NONE}   )
-+};
-+
-diff --git a/config.mk b/config.mk
-index 7084c33..8570938 100644
---- a/config.mk
-+++ b/config.mk
-@@ -20,9 +20,13 @@ FREETYPEINC = /usr/include/freetype2
- # OpenBSD (uncomment)
- #FREETYPEINC = ${X11INC}/freetype2
- 
-+# yajl
-+YAJLLIBS = -lyajl
-+YAJLINC = /usr/include/yajl
-+
- # includes and libs
--INCS = -I${X11INC} -I${FREETYPEINC}
--LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS}
-+INCS = -I${X11INC} -I${FREETYPEINC} -I${YAJLINC}
-+LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS} ${YAJLLIBS}
- 
- # flags
- CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS}
 diff --git a/dwm-msg.c b/dwm-msg.c
 new file mode 100644
 index 0000000..0071781
@@ -831,14 +726,6 @@ diff --git a/dwm.c b/dwm.c
 index 9fd0286..c90c61a 100644
 --- a/dwm.c
 +++ b/dwm.c
-@@ -30,6 +30,7 @@
- #include <unistd.h>
- #include <sys/types.h>
- #include <sys/wait.h>
-+#include <sys/epoll.h>
- #include <X11/cursorfont.h>
- #include <X11/keysym.h>
- #include <X11/Xatom.h>
 @@ -67,9 +68,21 @@ enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms *
  enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
         ClkClientWin, ClkRootWin, ClkLast }; /* clicks */
@@ -863,91 +750,6 @@ index 9fd0286..c90c61a 100644
  	float f;
  	const void *v;
  } Arg;
-@@ -97,6 +110,7 @@ struct Client {
- 	Client *snext;
- 	Monitor *mon;
- 	Window win;
-+	ClientState prevstate;
- };
- 
- typedef struct {
-@@ -111,8 +125,10 @@ typedef struct {
- 	void (*arrange)(Monitor *);
- } Layout;
- 
-+
- struct Monitor {
- 	char ltsymbol[16];
-+	char lastltsymbol[16];
- 	float mfact;
- 	int nmaster;
- 	int num;
-@@ -122,14 +138,17 @@ struct Monitor {
- 	unsigned int seltags;
- 	unsigned int sellt;
- 	unsigned int tagset[2];
-+	TagState tagstate;
- 	int showbar;
- 	int topbar;
- 	Client *clients;
- 	Client *sel;
-+	Client *lastsel;
- 	Client *stack;
- 	Monitor *next;
- 	Window barwin;
- 	const Layout *lt[2];
-+	const Layout *lastlt;
- };
- 
- typedef struct {
-@@ -175,6 +194,7 @@ static long getstate(Window w);
- static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
- static void grabbuttons(Client *c, int focused);
- static void grabkeys(void);
-+static int handlexevent(struct epoll_event *ev);
- static void incnmaster(const Arg *arg);
- static void keypress(XEvent *e);
- static void killclient(const Arg *arg);
-@@ -201,8 +221,10 @@ static void setclientstate(Client *c, long state);
- static void setfocus(Client *c);
- static void setfullscreen(Client *c, int fullscreen);
- static void setlayout(const Arg *arg);
-+static void setlayoutsafe(const Arg *arg);
- static void setmfact(const Arg *arg);
- static void setup(void);
-+static void setupepoll(void);
- static void seturgent(Client *c, int urg);
- static void showhide(Client *c);
- static void sigchld(int unused);
-@@ -261,17 +283,27 @@ static void (*handler[LASTEvent]) (XEvent *) = {
- 	[UnmapNotify] = unmapnotify
- };
- static Atom wmatom[WMLast], netatom[NetLast];
-+static int epoll_fd;
-+static int dpy_fd;
- static int running = 1;
- static Cur *cursor[CurLast];
- static Clr **scheme;
- static Display *dpy;
- static Drw *drw;
--static Monitor *mons, *selmon;
-+static Monitor *mons, *selmon, *lastselmon;
- static Window root, wmcheckwin;
- 
-+#include "ipc.h"
-+
- /* configuration, allows nested code to access above variables */
- #include "config.h"
- 
-+#ifdef VERSION
-+#include "IPCClient.c"
-+#include "yajl_dumps.c"
-+#include "ipc.c"
-+#endif
-+
- /* compile-time check if all tags fit into an unsigned int bit array. */
- struct NumTags { char limitexceeded[LENGTH(tags) > 31 ? -1 : 1]; };
- 
 @@ -492,6 +524,12 @@ cleanup(void)
  	XSync(dpy, False);
  	XSetInputFocus(dpy, PointerRoot, RevertToPointerRoot, CurrentTime);
@@ -1033,63 +835,6 @@ index 9fd0286..c90c61a 100644
  }
  
  void
-@@ -1512,6 +1597,18 @@ setlayout(const Arg *arg)
- 		drawbar(selmon);
- }
- 
-+void
-+setlayoutsafe(const Arg *arg)
-+{
-+	const Layout *ltptr = (Layout *)arg->v;
-+	if (ltptr == 0)
-+			setlayout(arg);
-+	for (int i = 0; i < LENGTH(layouts); i++) {
-+		if (ltptr == &layouts[i])
-+			setlayout(arg);
-+	}
-+}
-+
- /* arg > 1.0 will set mfact absolutely */
- void
- setmfact(const Arg *arg)
-@@ -1595,8 +1692,37 @@ setup(void)
- 	XSelectInput(dpy, root, wa.event_mask);
- 	grabkeys();
- 	focus(NULL);
-+	setupepoll();
- }
- 
-+void
-+setupepoll(void)
-+{
-+	epoll_fd = epoll_create1(0);
-+	dpy_fd = ConnectionNumber(dpy);
-+	struct epoll_event dpy_event;
-+
-+	// Initialize struct to 0
-+	memset(&dpy_event, 0, sizeof(dpy_event));
-+
-+	DEBUG("Display socket is fd %d\n", dpy_fd);
-+
-+	if (epoll_fd == -1) {
-+		fputs("Failed to create epoll file descriptor", stderr);
-+	}
-+
-+	dpy_event.events = EPOLLIN;
-+	dpy_event.data.fd = dpy_fd;
-+	if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, dpy_fd, &dpy_event)) {
-+		fputs("Failed to add display file descriptor to epoll", stderr);
-+		close(epoll_fd);
-+		exit(1);
-+	}
-+
-+	if (ipc_init(ipcsockpath, epoll_fd, ipccommands, LENGTH(ipccommands)) < 0) {
-+		fputs("Failed to initialize IPC\n", stderr);
-+	}
-+}
- 
- void
- seturgent(Client *c, int urg)
 @@ -1998,10 +2124,18 @@ updatestatus(void)
  void
  updatetitle(Client *c)
