@@ -3,6 +3,7 @@
 /* appearance */
 static const unsigned int borderpx  = 4;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
+static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 static const unsigned int gappx     = 10; /* gap between windows */
 static const unsigned int cornerrad = 6; /* corner radius */
 
@@ -35,10 +36,12 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Opera",  NULL,       NULL,       1 << 1,       0,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 1,       0,           -1 },
-	{ "Emacs",  NULL,       NULL,       1 << 3,       0,           -1 },
+	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
+	{ "Opera",    NULL,     NULL,           1 << 1,         1,          0,           0,        -1 },
+	{ "Firefox", NULL,     NULL,           1 << 1,    0,          0,          -1,        -1 },
+	{ "Emacs", NULL,     NULL,           1 << 3,    0,          0,          -1,        -1 },
+	{ "st-256color",      NULL,     NULL,           0,         0,          1,           0,        -1 },
+	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
 
 /* layout(s) */

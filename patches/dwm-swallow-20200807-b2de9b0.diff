@@ -4,72 +4,13 @@ Date: Fri, 7 Aug 2020 20:14:29 -0400
 Subject: [PATCH] added openbsd support for swallowing
 
 ---
- config.def.h |   9 +-
- config.mk    |   3 +-
  dwm.c        | 235 +++++++++++++++++++++++++++++++++++++++++++++++++--
- 3 files changed, 237 insertions(+), 10 deletions(-)
+ 1 file changed, 228 insertions(+), 7 deletions(-)
 
-diff --git a/config.def.h b/config.def.h
-index 1c0b587..fe51476 100644
---- a/config.def.h
-+++ b/config.def.h
-@@ -3,6 +3,7 @@
- /* appearance */
- static const unsigned int borderpx  = 1;        /* border pixel of windows */
- static const unsigned int snap      = 32;       /* snap pixel */
-+static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
- static const int showbar            = 1;        /* 0 means no bar */
- static const int topbar             = 1;        /* 0 means bottom bar */
- static const char *fonts[]          = { "monospace:size=10" };
-@@ -26,9 +27,11 @@ static const Rule rules[] = {
- 	 *	WM_CLASS(STRING) = instance, class
- 	 *	WM_NAME(STRING) = title
- 	 */
--	/* class      instance    title       tags mask     isfloating   monitor */
--	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
--	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
-+	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
-+	{ "Gimp",    NULL,     NULL,           0,         1,          0,           0,        -1 },
-+	{ "Firefox", NULL,     NULL,           1 << 8,    0,          0,          -1,        -1 },
-+	{ "St",      NULL,     NULL,           0,         0,          1,           0,        -1 },
-+	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
- };
- 
- /* layout(s) */
-diff --git a/config.mk b/config.mk
-index 7084c33..ff9e508 100644
---- a/config.mk
-+++ b/config.mk
-@@ -19,10 +19,11 @@ FREETYPELIBS = -lfontconfig -lXft
- FREETYPEINC = /usr/include/freetype2
- # OpenBSD (uncomment)
- #FREETYPEINC = ${X11INC}/freetype2
-+#KVMLIB = -lkvm
- 
- # includes and libs
- INCS = -I${X11INC} -I${FREETYPEINC}
--LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS}
-+LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS} -lX11-xcb -lxcb -lxcb-res ${KVMLIB}
- 
- # flags
- CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS}
 diff --git a/dwm.c b/dwm.c
 index 9fd0286..e9f08f7 100644
 --- a/dwm.c
 +++ b/dwm.c
-@@ -40,6 +40,12 @@
- #include <X11/extensions/Xinerama.h>
- #endif /* XINERAMA */
- #include <X11/Xft/Xft.h>
-+#include <X11/Xlib-xcb.h>
-+#include <xcb/res.h>
-+#ifdef __OpenBSD__
-+#include <sys/sysctl.h>
-+#include <kvm.h>
-+#endif /* __OpenBSD */
- 
- #include "drw.h"
- #include "util.h"
 @@ -92,9 +98,11 @@ struct Client {
  	int basew, baseh, incw, inch, maxw, maxh, minw, minh;
  	int bw, oldbw;
@@ -92,19 +33,6 @@ index 9fd0286..e9f08f7 100644
  	int monitor;
  } Rule;
  
-@@ -235,6 +245,12 @@ static int xerrordummy(Display *dpy, XErrorEvent *ee);
- static int xerrorstart(Display *dpy, XErrorEvent *ee);
- static void zoom(const Arg *arg);
- 
-+static pid_t getparentprocess(pid_t p);
-+static int isdescprocess(pid_t p, pid_t c);
-+static Client *swallowingclient(Window w);
-+static Client *termforwin(const Client *c);
-+static pid_t winpid(Window w);
-+
- /* variables */
- static const char broken[] = "broken";
- static char stext[256];
 @@ -269,6 +285,8 @@ static Drw *drw;
  static Monitor *mons, *selmon;
  static Window root, wmcheckwin;
