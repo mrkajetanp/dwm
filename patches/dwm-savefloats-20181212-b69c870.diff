@@ -2,14 +2,6 @@ diff --git i/dwm.c w/dwm.c
 index 4465af1..96b0b26 100644
 --- i/dwm.c
 +++ w/dwm.c
-@@ -88,6 +88,7 @@ struct Client {
- 	char name[256];
- 	float mina, maxa;
- 	int x, y, w, h;
-+	int sfx, sfy, sfw, sfh; /* stored float geometry, used on mode revert */
- 	int oldx, oldy, oldw, oldh;
- 	int basew, baseh, incw, inch, maxw, maxh, minw, minh;
- 	int bw, oldbw;
 @@ -1056,6 +1057,10 @@ manage(Window w, XWindowAttributes *wa)
  	updatewindowtype(c);
  	updatesizehints(c);

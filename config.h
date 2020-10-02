@@ -44,11 +44,11 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
+	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor   float x,y,w,h   floatborderpx */
 	{ "Opera",    NULL,     NULL,           1 << 1,         0,          0,           0,        -1 },
 	{ "Firefox", NULL,     NULL,           1 << 1,    0,          0,          -1,        -1 },
 	{ "Emacs", NULL,     NULL,           1 << 3,    0,          0,          -1,        -1 },
-	{ "st-256color",      NULL,     NULL,           0,         0,          1,           0,        -1 },
+	{ "st-256color",      NULL,     NULL,           0,         0,          1,           0,        -1, 100, 100, 50, 50, 4},
 	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
 
