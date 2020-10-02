@@ -3,6 +3,7 @@
 /* appearance */
 static const unsigned int borderpx  = 4;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
+static const int rmaster           = 0;        /* 1 means master-area is initially on the right */
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 static const unsigned int gappx     = 10; /* gap between windows */
 static const unsigned int cornerrad = 6; /* corner radius */
@@ -94,7 +95,6 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_k,      pushup,     { 0 } },
 	{ MODKEY,                       XK_h,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_l,      focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_n,      switchcol,     { 0 } },
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_v,      incnmaster,     {.i = -1 } },
 	{ MODKEY|ControlMask|ShiftMask, XK_h,      setcfact,       {.f = -0.25} },
@@ -114,7 +114,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_r,      setlayout,      {.v = &layouts[7]} },
 	{ MODKEY,                       XK_g,      setlayout,      {.v = &layouts[8]} },
 	{ MODKEY|ShiftMask,             XK_t,      setlayout,      {.v = &layouts[9]} },
-	{ MODKEY,                       XK_space,  focusmaster,      {0} },
+	{ MODKEY,                       XK_space,      switchcol,     { 0 } },
+	{ MODKEY,                       XK_n,  togglermaster,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_numbersign,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_exclam,      tag,            {.ui = ~0 } },
