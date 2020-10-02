@@ -56,6 +56,7 @@ static const Layout layouts[] = {
 	{ "(BStack (H))",      bstackhoriz },
 	{ "(Centered)",      centeredmaster },
 	{ "(Centered (F))",      centeredfloatingmaster },
+	{ "(Deck)",      deck },
 };
 
 /* key definitions */
@@ -82,7 +83,6 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_d,      spawn,          {.v = rofiruncmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
-	{ MODKEY,                       XK_r,      spawn,      {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_r,      self_restart,      {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
@@ -105,6 +105,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_o,      setlayout,      {.v = &layouts[4]} },
 	{ MODKEY,                       XK_c,      setlayout,      {.v = &layouts[5]} },
 	{ MODKEY,                       XK_n,      setlayout,      {.v = &layouts[6]} },
+	{ MODKEY,                       XK_r,      setlayout,      {.v = &layouts[7]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_numbersign,      view,           {.ui = ~0 } },
