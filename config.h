@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 4;        /* border pixel of windows */
+static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int rmaster           = 0;        /* 1 means master-area is initially on the right */
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
@@ -24,7 +24,8 @@ static const char col_gray2[]       = "#4C566A";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
-static const char col_nord_white[]        = "#ABB1BB";
+static const char col_nord_white[]  = "#ABB1BB";
+static const char col_purple[]        = "#d07ef2";
 
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
@@ -34,9 +35,9 @@ static const char *colors[][3]      = {
 
 static const Inset default_inset = {
 	.x = 0,
-	.y = 0,
+	.y = 9,
 	.w = 0,
-	.h = 0,
+	.h = 48,
 };
 
 /* tagging */
@@ -90,10 +91,11 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *rofiruncmd[] = { "rofi", "-show", "run", "-font", "Noto Sans 12", "-theme", "materia", NULL };
-static const char *rofidruncmd[] = { "rofi", "-show", "drun", "-font", "Noto Sans 12", "-theme", "materia", NULL };
+static const char *rofidruncmd[] = { "rofi", "-show", "drun", "-font", "Noto Sans 12", "-theme", "clean", NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
+static const char *flameshotcmd[]  = { "flameshot", "gui" };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -159,9 +161,11 @@ static Key keys[] = {
 	TAGKEYS(                        XK_parenright,                      7)
 	TAGKEYS(                        XK_plus,                      8)
 	TAGKEYS(                        XK_bracketright,                      9)
+	{ MODKEY,                       XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_x,      killclient,     {0} },
 	{ MODKEY|ShiftMask, XK_x,      quit,           {0} },
 	{ MODKEY|ShiftMask,             XK_r,      quit,      {1} },
+	{ ShiftMask|ControlMask,        XK_braceleft,      spawn,      { .v = flameshotcmd } },
 };
 
 /* button definitions */
