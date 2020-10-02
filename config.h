@@ -29,6 +29,13 @@ static const char *colors[][3]      = {
 	[SchemeSel]  = { col_gray4, col_cyan,  col_nord_white  },
 };
 
+static const Inset default_inset = {
+	.x = 0,
+	.y = 0,
+	.w = 0,
+	.h = 0,
+};
+
 /* tagging */
 static const char *tags[] = { "Term", "Web", "Finance", "Code", "Notes", "Docs", "Media", "Org", "Others", "Games" };
 

@@ -1,0 +1,36 @@
+From c74af17bcab18263ea565e6760728d03987359a7 Mon Sep 17 00:00:00 2001
+From: jD91mZM2 <me@krake.one>
+Date: Sun, 31 May 2020 22:06:00 +0200
+Subject: [PATCH] Custom screen insets
+
+diff --git a/dwm.c b/dwm.c
+index 4465af1..f91da15 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -1497,7 +1508,23 @@ setfullscreen(Client *c, int fullscreen)
+ 	}
+ }
+ 
++void
++setinset(Monitor *m, Inset inset)
++{
++	m->inset = inset;
++	updatebarpos(m);
++	arrange(m);
++}
++
++void
++updateinset(const Arg *arg)
++{
++	Inset *inset = (Inset *)arg->v;
++
++	for (Monitor *m = mons; m; m = m->next)
++		setinset(m, *inset);
++}
++
+ void
+ setlayout(const Arg *arg)
+ {
+--
+2.26.2
+

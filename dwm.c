@@ -118,6 +118,13 @@ typedef struct {
 	void (*arrange)(Monitor *);
 } Layout;
 
+typedef struct {
+	int x;
+	int y;
+	int w;
+	int h;
+} Inset;
+
 typedef struct Pertag Pertag;
 struct Monitor {
 	char ltsymbol[16];
@@ -139,6 +146,7 @@ struct Monitor {
 	Monitor *next;
 	Window barwin;
 	const Layout *lt[2];
+	Inset inset;
 	Pertag *pertag;
 };
 
@@ -217,6 +225,8 @@ static void sendmon(Client *c, Monitor *m);
 static void setclientstate(Client *c, long state);
 static void setfocus(Client *c);
 static void setfullscreen(Client *c, int fullscreen);
+static void setinset(Monitor *m, Inset inset);
+static void updateinset(const Arg *arg);
 static void setlayout(const Arg *arg);
 static void setcfact(const Arg *arg);
 static void setmfact(const Arg *arg);
@@ -260,7 +270,6 @@ static int xerror(Display *dpy, XErrorEvent *ee);
 static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void zoom(const Arg *arg);
-static void focusmaster(const Arg *arg);
 
 static pid_t getparentprocess(pid_t p);
 static int isdescprocess(pid_t p, pid_t c);
@@ -769,6 +778,7 @@ createmon(void)
 		m->pertag->showbars[i] = m->showbar;
 	}
 
+	m->inset = default_inset;
 	return m;
 }
 
@@ -1837,6 +1847,23 @@ setfullscreen(Client *c, int fullscreen)
 }
 
 void
+setinset(Monitor *m, Inset inset)
+{
+	m->inset = inset;
+	updatebarpos(m);
+	arrange(m);
+}
+
+void
+updateinset(const Arg *arg)
+{
+	Inset *inset = (Inset *)arg->v;
+
+	for (Monitor *m = mons; m; m = m->next)
+		setinset(m, *inset);
+}
+
+void
 setlayout(const Arg *arg)
 {
 	if (!arg || !arg->v || arg->v != selmon->lt[selmon->sellt])
@@ -2323,6 +2350,13 @@ updatebarpos(Monitor *m)
 		m->wy = m->topbar ? m->wy + bh + vp : m->wy;
 	} else
 		m->by = -bh - vp;
+
+	// Custom insets
+	Inset inset = m->inset;
+	m->wx += inset.x;
+	m->wy += inset.y;
+	m->ww -= inset.w + inset.x;
+	m->wh -= inset.h + inset.y;
 }
 
 void
@@ -3289,14 +3323,3 @@ void tatami(Monitor *m) {
 	}
 }
 
-void focusmaster(const Arg *arg) {
-	Client *c;
-
-	if (selmon->nmaster < 1)
-		return;
-
-	c = nexttiled(selmon->clients);
-
-	if (c)
-		focus(c);
-}
