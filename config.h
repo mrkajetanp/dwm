@@ -10,6 +10,9 @@ static const unsigned int cornerrad = 6; /* corner radius */
 
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
+static const int usealtbar          = 1;        /* 1 means use non-dwm status bar */
+static const char *altbarclass      = "Polybar"; /* Alternate bar class name */
+static const char *altbarcmd        = "$HOME/.config/polybar/launch.sh"; /* Alternate bar launch command */
 
 static const int vertpad            = 5;        /* vertical bar padding */
 static const int sidepad            = 5;        /* horizontal bar padding */
