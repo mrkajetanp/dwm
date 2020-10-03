@@ -241,7 +241,7 @@ static void monocle(Monitor *m);
 static void motionnotify(XEvent *e);
 static void movemouse(const Arg *arg);
 static Client *nexttiled(Client *c);
-static void pop(Client *);
+/* static void pop(Client *); */
 static Client *prevtiled(Client *c);
 static void propertynotify(XEvent *e);
 static void pushdown(const Arg *arg);
@@ -265,8 +265,8 @@ static void setviewport(void);
 static void updatecurrentdesktop(void);
 static void setfocus(Client *c);
 static void setfullscreen(Client *c, int fullscreen);
-static void setinset(Monitor *m, Inset inset);
-static void updateinset(const Arg *arg);
+/* static void setinset(Monitor *m, Inset inset); */
+/* static void updateinset(const Arg *arg); */
 static void setlayout(const Arg *arg);
 static void setlayoutsafe(const Arg *arg);
 static void setcfact(const Arg *arg);
@@ -1292,9 +1292,9 @@ fake_signal(void)
 			if (paramn == 1) arg = (Arg) {0};
 			else if (paramn > 2) return 1;
 			else if (strncmp(param, "i", n - len_str_sig) == 0)
-				sscanf(fsignal + len_indicator + n, "%i", &(arg.i));
+				sscanf(fsignal + len_indicator + n, "%i", (int*)&(arg.i));
 			else if (strncmp(param, "ui", n - len_str_sig) == 0)
-				sscanf(fsignal + len_indicator + n, "%u", &(arg.ui));
+				sscanf(fsignal + len_indicator + n, "%u", (unsigned int*)&(arg.ui));
 			else if (strncmp(param, "f", n - len_str_sig) == 0)
 				sscanf(fsignal + len_indicator + n, "%f", &(arg.f));
 			else return 1;
@@ -1555,14 +1555,14 @@ nexttiled(Client *c)
 	return c;
 }
 
-void
-pop(Client *c)
-{
-	detach(c);
-	attach(c);
-	focus(c);
-	arrange(c->mon);
-}
+/* void */
+/* pop(Client *c) */
+/* { */
+/* 	detach(c); */
+/* 	attach(c); */
+/* 	focus(c); */
+/* 	arrange(c->mon); */
+/* } */
 
 Client *
 prevtiled(Client *c) {
@@ -2019,7 +2019,7 @@ setcurrentdesktop(void){
 }
 void setdesktopnames(void){
 	XTextProperty text;
-	Xutf8TextListToTextProperty(dpy, tags, TAGSLENGTH, XUTF8StringStyle, &text);
+	Xutf8TextListToTextProperty(dpy, (char**)tags, TAGSLENGTH, XUTF8StringStyle, &text);
 	XSetTextProperty(dpy, root, &text, netatom[NetDesktopNames]);
 }
 
@@ -2094,22 +2094,22 @@ setfullscreen(Client *c, int fullscreen)
 	}
 }
 
-void
-setinset(Monitor *m, Inset inset)
-{
-	m->inset = inset;
-	updatebarpos(m);
-	arrange(m);
-}
+/* void */
+/* setinset(Monitor *m, Inset inset) */
+/* { */
+/* 	m->inset = inset; */
+/* 	updatebarpos(m); */
+/* 	arrange(m); */
+/* } */
 
-void
-updateinset(const Arg *arg)
-{
-	Inset *inset = (Inset *)arg->v;
+/* void */
+/* updateinset(const Arg *arg) */
+/* { */
+/* 	Inset *inset = (Inset *)arg->v; */
 
-	for (Monitor *m = mons; m; m = m->next)
-		setinset(m, *inset);
-}
+/* 	for (Monitor *m = mons; m; m = m->next) */
+/* 		setinset(m, *inset); */
+/* } */
 
 void
 setlayout(const Arg *arg)
@@ -2699,7 +2699,7 @@ updateclientlist()
 void updatecurrentdesktop(void){
 	long rawdata[] = { selmon->tagset[selmon->seltags] };
 	int i=0;
-	while(*rawdata >> i+1){
+	while(*rawdata >> (i+1)){
 		i++;
 	}
 	long data[] = { i };

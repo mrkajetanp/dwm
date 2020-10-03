@@ -1,4 +1,5 @@
 /* See LICENSE file for copyright and license details. */
+#include <X11/XF86keysym.h>
 
 /* appearance */
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
@@ -41,7 +42,7 @@ static const Inset default_inset = {
 };
 
 /* tagging */
-static const char *tags[] = { "Term", "Web", "Finance", "Code", "Notes", "Docs", "Media", "Org", "Others", "Games" };
+static const char *tags[] = { "", "", "", "", "ﱅ", "", "", "", "漣", "" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -96,6 +97,18 @@ static const char *termcmd[]  = { "st", NULL };
 static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
 static const char *flameshotcmd[]  = { "flameshot", "gui" };
+
+/* Brightness, volume & media commands */
+
+static const char *volumeupcmd[]  = { "pulsemixer", "--change-volume", "+10" };
+static const char *volumedowncmd[]  = { "pulsemixer", "--change-volume", "-10" };
+static const char *volumemutecmd[]  = { "pulsemixer", "--toggle-mute" };
+
+static const char *monbrightnessupcmd[]  = { "light", "-A", "10" };
+static const char *monbrightnessdowncmd[]  = { "light", "-U", "10" };
+
+static const char *kbdbrightnessupcmd[]  = { "light", "-s", "sysfs/leds/smc::kbd_backlight", "-A", "10" };
+static const char *kbdbrightnessdowncmd[]  = { "light", "-s", "sysfs/leds/smc::kbd_backlight", "-U", "10" };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -166,6 +179,17 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask, XK_x,      quit,           {0} },
 	{ MODKEY|ShiftMask,             XK_r,      quit,      {1} },
 	{ ShiftMask|ControlMask,        XK_braceleft,      spawn,      { .v = flameshotcmd } },
+
+	/**** Brightness, volume & media keys ****/
+	// Audio
+	{ 0,        XF86XK_AudioRaiseVolume,      spawn,      { .v = volumeupcmd } },
+	{ 0,        XF86XK_AudioLowerVolume,      spawn,      { .v = volumedowncmd } },
+	{ 0,        XF86XK_AudioMute,            spawn,      { .v = volumemutecmd } },
+	// Brightness
+	{ 0,        XF86XK_MonBrightnessUp,      spawn,      { .v = monbrightnessupcmd } },
+	{ 0,        XF86XK_MonBrightnessDown,      spawn,      { .v = monbrightnessdowncmd } },
+	{ 0,        XF86XK_KbdBrightnessUp,      spawn,      { .v = kbdbrightnessupcmd } },
+	{ 0,        XF86XK_KbdBrightnessDown,      spawn,      { .v = kbdbrightnessdowncmd } },
 };
 
 /* button definitions */
