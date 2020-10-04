@@ -1,0 +1,35 @@
+From 4ab9c0daea10cc519f764612040d5d4f901700ab Mon Sep 17 00:00:00 2001
+From: bakkeby <bakkeby@gmail.com>
+Date: Tue, 7 Apr 2020 12:43:06 +0200
+Subject: [PATCH] Adding window role rule
+
+This patch adds a new rule property based on WM_WINDOW_ROLE(STRING) so that one can
+differentiate between window roles, e.g. Firefox "browser" vs "Preferences".
+---
+ config.def.h | 7 ++++---
+ dwm.c        | 7 ++++++-
+ 2 files changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/dwm.c b/dwm.c
+index 4465af1..f2cf8ed 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -279,6 +280,7 @@ void
+ applyrules(Client *c)
+ {
+ 	const char *class, *instance;
++	char role[64];
+ 	unsigned int i;
+ 	const Rule *r;
+ 	Monitor *m;
+@@ -1553,6 +1557,7 @@ setup(void)
+ 	wmatom[WMDelete] = XInternAtom(dpy, "WM_DELETE_WINDOW", False);
+ 	wmatom[WMState] = XInternAtom(dpy, "WM_STATE", False);
+ 	wmatom[WMTakeFocus] = XInternAtom(dpy, "WM_TAKE_FOCUS", False);
++	wmatom[WMWindowRole] = XInternAtom(dpy, "WM_WINDOW_ROLE", False);
+ 	netatom[NetActiveWindow] = XInternAtom(dpy, "_NET_ACTIVE_WINDOW", False);
+ 	netatom[NetSupported] = XInternAtom(dpy, "_NET_SUPPORTED", False);
+ 	netatom[NetWMName] = XInternAtom(dpy, "_NET_WM_NAME", False);
+-- 
+2.19.1
+
