@@ -1,0 +1,107 @@
+diff -urp -x config.mk dwm-6.1/drw.h dwm-6.1-patched/drw.h
+diff -urp -x config.mk dwm-6.1/dwm.c dwm-6.1-patched/dwm.c
+--- dwm-6.1/dwm.c	2015-11-09 06:39:37.000000000 +0800
++++ dwm-6.1-patched/dwm.c	2016-03-09 15:55:35.723676356 +0800
+@@ -1646,6 +1677,66 @@ spawn(const Arg *arg)
+ }
+ 
+ void
++swapclient(const Arg *arg)
++{
++	Client *s, *m, t;
++
++	if (!mark || !selmon->sel || mark == selmon->sel
++	    || !selmon->lt[selmon->sellt]->arrange)
++		return;
++	s = selmon->sel;
++	m = mark;
++	t = *s;
++	strcpy(s->name, m->name);
++	s->win = m->win;
++	s->x = m->x;
++	s->y = m->y;
++	s->w = m->w;
++	s->h = m->h;
++
++	m->win = t.win;
++	strcpy(m->name, t.name);
++	m->x = t.x;
++	m->y = t.y;
++	m->w = t.w;
++	m->h = t.h;
++
++	selmon->sel = m;
++	mark = s;
++	focus(s);
++	setmark(m);
++
++	arrange(s->mon);
++	if (s->mon != m->mon) {
++		arrange(m->mon);
++	}
++}
++
++void
++swapfocus(const Arg *arg)
++{
++	Client *t;
++
++	if (!selmon->sel || !mark || selmon->sel == mark)
++		return;
++	t = selmon->sel;
++	if (mark->mon != selmon) {
++		unfocus(selmon->sel, 0);
++		selmon = mark->mon;
++	}
++	if (ISVISIBLE(mark)) {
++		focus(mark);
++		restack(selmon);
++	} else {
++		selmon->seltags ^= 1;
++		selmon->tagset[selmon->seltags] = mark->tags;
++		focus(mark);
++		arrange(selmon);
++	}
++	setmark(t);
++}
++
++void
+ tag(const Arg *arg)
+ {
+ 	if (selmon->sel && arg->ui & TAGMASK) {
+@@ -1713,6 +1804,14 @@ togglefloating(const Arg *arg)
+ }
+ 
+ void
++togglemark(const Arg *arg)
++{
++	if (!selmon->sel)
++		return;
++	setmark(selmon->sel == mark ? 0 : selmon->sel);
++}
++
++void
+ toggletag(const Arg *arg)
+ {
+ 	unsigned int newtags;
+@@ -1745,7 +1844,10 @@ unfocus(Client *c, int setfocus)
+ 	if (!c)
+ 		return;
+ 	grabbuttons(c, 0);
+-	XSetWindowBorder(dpy, c->win, scheme[SchemeNorm].border->pix);
++	if (c == mark)
++		XSetWindowBorder(dpy, c->win, scheme[SchemeNorm].mark->pix);
++	else
++		XSetWindowBorder(dpy, c->win, scheme[SchemeNorm].border->pix);
+ 	if (setfocus) {
+ 		XSetInputFocus(dpy, root, RevertToPointerRoot, CurrentTime);
+ 		XDeleteProperty(dpy, root, netatom[NetActiveWindow]);
+@@ -1758,6 +1860,8 @@ unmanage(Client *c, int destroyed)
+ 	Monitor *m = c->mon;
+ 	XWindowChanges wc;
+ 
++	if (c == mark)
++		setmark(0);
+ 	/* The server grab construct avoids race conditions. */
+ 	detach(c);
+ 	detachstack(c);

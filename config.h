@@ -26,16 +26,18 @@ static const char dmenufont[]    = "Open Sans:size=10";
 static char normbgcolor[]        = "#222222";
 static char normbordercolor[]    = "#4C566A";
 static char normfgcolor[]        = "#bbbbbb";
+static char normmarkcolor[]      = "#B48EAD";
 static char selfgcolor[]         = "#eeeeee";
 static char selbgcolor[]         = "#005577";
 static char selbordercolor[]     = "#ABB1BB";
+static char selmarkcolor[]       = "#5E81AC";
 static char urgbordercolor[]     = "#ff0000";
 
-static char *colors[][3]      = {
+static char *colors[][4]      = {
 	/*               fg             bg             border   */
-	[SchemeNorm] = { normfgcolor,   normbgcolor,   normbordercolor },
-	[SchemeSel]  = { selfgcolor,    selbgcolor,    selbordercolor  },
-	[SchemeUrg]  = { selfgcolor,    selbgcolor,    urgbordercolor  },
+	[SchemeNorm] = { normfgcolor,   normbgcolor,   normbordercolor, normmarkcolor },
+	[SchemeSel]  = { selfgcolor,    selbgcolor,    selbordercolor,  selmarkcolor },
+	[SchemeUrg]  = { selfgcolor,    selbgcolor,    urgbordercolor,  selmarkcolor  },
 };
 
 static const Inset default_inset = {
@@ -46,7 +48,7 @@ static const Inset default_inset = {
 };
 
 /* tagging */
-static const char *tags[] = { "", "", "", "", "ﱅ", "", "", "", "漣", "" };
+static const char *tags[] = { "", "", "", "", "ﱅ", "", "", "", "漣", "" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -54,12 +56,16 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 +	 *  WM_WINDOW_ROLE(STRING) = role
 	 */
-	/* class            role     instance  title           tags mask     isfloating   isterminal  noswallow  monitor   float x,y,w,h       fborder */
-	{ "st-256color",    NULL,    NULL,     NULL,           0,            0,           1,           0,        -1,        100, 100, 50, 50,    4},
-	{ "Opera",          NULL,    NULL,     NULL,           1 << 1,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
-	{ "Firefox",        NULL,    NULL,     NULL,           1 << 1,       0,           0,          -1,        -1 },
-	{ "Emacs",          NULL,    NULL,     NULL,           1 << 3,       0,           0,          -1,        -1 },
-	{ NULL,             NULL,    NULL,     "Event Tester", 0,            0,           0,           1,        -1 }, /* xev */
+	/* class              role     instance  title           tags mask     isfloating   isterminal  noswallow  monitor   float x,y,w,h       fborder */
+	{ "st-256color",      NULL,    NULL,     NULL,           0,            0,           1,           0,        -1,        100, 100, 50, 50,    4},
+	{ "Opera",            NULL,    NULL,     NULL,           1 << 1,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "Chromium",         NULL,    NULL,     NULL,           1 << 1,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "Spotify",          NULL,    NULL,     NULL,           1 << 6,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "Bitwarden",        NULL,    NULL,     NULL,           1 << 9,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "tutanota-desktop", NULL,    NULL,     NULL,           1 << 8,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "Firefox",          NULL,    NULL,     NULL,           1 << 1,       0,           0,          -1,        -1 },
+	{ "Emacs",            NULL,    NULL,     NULL,           1 << 3,       0,           0,          -1,        -1 },
+	{ NULL,               NULL,    NULL,     "Event Tester", 0,            0,           0,           1,        -1 }, /* xev */
 };
 
 /* layout(s) */
@@ -97,22 +103,24 @@ static const MonitorRule monrules[] = {
 
 /* Xresources preferences to load at startup */
 ResourcePref resources[] = {
-		{ "normbgcolor",        STRING,  &normbgcolor },
-		{ "normbordercolor",    STRING,  &normbordercolor },
-		{ "normfgcolor",        STRING,  &normfgcolor },
-		{ "selbgcolor",         STRING,  &selbgcolor },
-		{ "selbordercolor",     STRING,  &selbordercolor },
-		{ "selfgcolor",         STRING,  &selfgcolor },
-		{ "borderpx",          	INTEGER, &borderpx },
-		{ "snap",          		INTEGER, &snap },
-		{ "showbar",          	INTEGER, &showbar },
-		{ "topbar",          	INTEGER, &topbar },
-		{ "nmaster",          	INTEGER, &nmaster },
-		{ "resizehints",       	INTEGER, &resizehints },
-		{ "mfact",      	 	FLOAT,   &mfact },
-		{ "gappx",          	INTEGER, &gappx },
-		{ "cornerrad",       	INTEGER, &cornerrad },
-		{ "rmaster",       	    INTEGER, &rmaster },
+		{ "normbgcolor",        STRING,   &normbgcolor },
+		{ "normbordercolor",    STRING,   &normbordercolor },
+		{ "normfgcolor",        STRING,   &normfgcolor },
+		{ "selbgcolor",         STRING,   &selbgcolor },
+		{ "selbordercolor",     STRING,   &selbordercolor },
+		{ "selfgcolor",         STRING,   &selfgcolor },
+		{ "selmarkcolor",       STRING,   &selmarkcolor },
+		{ "normmarkcolor",      STRING,   &normmarkcolor },
+		{ "borderpx",          	INTEGER,  &borderpx },
+		{ "snap",          		INTEGER,  &snap },
+		{ "showbar",          	INTEGER,  &showbar },
+		{ "topbar",          	INTEGER,  &topbar },
+		{ "nmaster",          	INTEGER,  &nmaster },
+		{ "resizehints",       	INTEGER,  &resizehints },
+		{ "mfact",      	 	FLOAT,    &mfact },
+		{ "gappx",          	INTEGER,  &gappx },
+		{ "cornerrad",       	INTEGER,  &cornerrad },
+		{ "rmaster",       	    INTEGER,  &rmaster },
 };
 
 /* key definitions */
@@ -191,6 +199,10 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_space,        togglefloating, {0} },
 	{ MODKEY,                       XK_f,            togglefullscr,  {0} },
 	{ MODKEY,                       XK_b,            togglebar,      {0} },
+
+    { MODKEY,                       XK_minus, togglemark,   {0} },
+    { MODKEY,                       XK_slash,      swapfocus,      {0} },
+    { MODKEY,                       XK_at,      swapclient,     {0} },
 
 	/**** Multiple monitors ****/
 	{ MODKEY,                       XK_comma,        focusmon,       {.i = -1 } },
