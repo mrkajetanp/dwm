@@ -1,0 +1,30 @@
+From f20e5593e154e7e46c3f7100bd1378c7844b5ec8 Mon Sep 17 00:00:00 2001
+From: Dirk Leichsenring <dlei@reddott.de>
+Date: Sun, 21 Jun 2020 14:00:40 +0200
+Subject: [PATCH] Make the borders of urgent windows a different color - for dwm 6.2
+
+---
+ config.def.h | 2 ++
+ dwm.c        | 7 +++++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/dwm.c b/dwm.c
+index 4465af1..fda4013 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -2022,8 +2022,11 @@ updatewmhints(Client *c)
+ 		if (c == selmon->sel && wmh->flags & XUrgencyHint) {
+ 			wmh->flags &= ~XUrgencyHint;
+ 			XSetWMHints(dpy, c->win, wmh);
+-		} else
++		} else {
+ 			c->isurgent = (wmh->flags & XUrgencyHint) ? 1 : 0;
++			if (c->isurgent)
++				XSetWindowBorder(dpy, c->win, scheme[SchemeUrg][ColBorder].pixel);
++		}
+ 		if (wmh->flags & InputHint)
+ 			c->neverfocus = !wmh->input;
+ 		else
+-- 
+2.27.0
+
