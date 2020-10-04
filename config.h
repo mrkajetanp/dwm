@@ -18,6 +18,8 @@ static const char *altbarcmd        = "$HOME/.config/polybar/launch.sh"; /* Alte
 static const int vertpad            = 5;        /* vertical bar padding */
 static const int sidepad            = 5;        /* horizontal bar padding */
 
+static const int viewontag         = 1;     /* Switch view on tag switch */
+
 static const char *fonts[]          = { "Open Sans:size=10" };
 static const char dmenufont[]       = "Open Sans:size=10";
 static const char col_gray1[]       = "#222222";
