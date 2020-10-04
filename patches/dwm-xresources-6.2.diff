@@ -1,0 +1,53 @@
+From 2832bd78a690606a48a7e1d370cd60fd92ee4988 Mon Sep 17 00:00:00 2001
+From: MLquest8 <miskuzius@gmail.com>
+Date: Fri, 12 Jun 2020 15:43:31 +0400
+Subject: [PATCH] handle various setting of various types from Xresources
+
+---
+ config.def.h | 54 ++++++++++++++++++++++++++-------------
+ drw.c        |  2 +-
+ drw.h        |  2 +-
+ dwm.c        | 72 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 111 insertions(+), 19 deletions(-)
+
+diff --git a/drw.c b/drw.c
+index 4cdbcbe..8f1059e 100644
+--- a/drw.c
++++ b/drw.c
+@@ -208,7 +208,7 @@ drw_clr_create(Drw *drw, Clr *dest, const char *clrname)
+ /* Wrapper to create color schemes. The caller has to call free(3) on the
+  * returned color scheme when done using it. */
+ Clr *
+-drw_scm_create(Drw *drw, const char *clrnames[], size_t clrcount)
++drw_scm_create(Drw *drw, char *clrnames[], size_t clrcount)
+ {
+ 	size_t i;
+ 	Clr *ret;
+diff --git a/drw.h b/drw.h
+index 4bcd5ad..42b04ce 100644
+--- a/drw.h
++++ b/drw.h
+@@ -39,7 +39,7 @@ void drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned in
+ 
+ /* Colorscheme abstraction */
+ void drw_clr_create(Drw *drw, Clr *dest, const char *clrname);
+-Clr *drw_scm_create(Drw *drw, const char *clrnames[], size_t clrcount);
++Clr *drw_scm_create(Drw *drw, char *clrnames[], size_t clrcount);
+ 
+ /* Cursor abstraction */
+ Cur *drw_cur_create(Drw *drw, int shape);
+diff --git a/dwm.c b/dwm.c
+index 9fd0286..dc0d219 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -36,6 +36,7 @@
+ #include <X11/Xlib.h>
+ #include <X11/Xproto.h>
+ #include <X11/Xutil.h>
++#include <X11/Xresource.h>
+ #ifdef XINERAMA
+ #include <X11/extensions/Xinerama.h>
+ #endif /* XINERAMA */
+--
+2.26.2
+

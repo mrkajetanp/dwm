@@ -2,15 +2,15 @@
 #include <X11/XF86keysym.h>
 
 /* appearance */
-static const unsigned int borderpx  = 3;        /* border pixel of windows */
-static const unsigned int snap      = 32;       /* snap pixel */
-static const int rmaster           = 0;        /* 1 means master-area is initially on the right */
-static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
-static const unsigned int gappx     = 10; /* gap between windows */
-static const unsigned int cornerrad = 6; /* corner radius */
+static unsigned int borderpx  = 3;        /* border pixel of windows */
+static unsigned int snap      = 32;       /* snap pixel */
+static int rmaster           = 0;        /* 1 means master-area is initially on the right */
+static int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
+static unsigned int gappx     = 10; /* gap between windows */
+static unsigned int cornerrad = 6; /* corner radius */
 
-static const int showbar            = 1;        /* 0 means no bar */
-static const int topbar             = 1;        /* 0 means bottom bar */
+static int showbar            = 1;        /* 0 means no bar */
+static int topbar             = 1;        /* 0 means bottom bar */
 static const int usealtbar          = 1;        /* 1 means use non-dwm status bar */
 static const char *altbarclass      = "Polybar"; /* Alternate bar class name */
 static const char *altbarcmd        = "$HOME/.config/polybar/launch.sh"; /* Alternate bar launch command */
@@ -22,20 +22,20 @@ static const int viewontag         = 1;     /* Switch view on tag switch */
 
 static const char *fonts[]          = { "Open Sans:size=10" };
 static const char dmenufont[]       = "Open Sans:size=10";
-static const char col_gray1[]       = "#222222";
-static const char col_gray2[]       = "#4C566A";
-static const char col_gray3[]       = "#bbbbbb";
-static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#005577";
-static const char col_nord_white[]  = "#ABB1BB";
-static const char col_purple[]        = "#d07ef2";
-static const char col_urgborder[]   = "#ff0000";
 
-static const char *colors[][3]      = {
+static char normbgcolor[]       = "#222222";
+static char normbordercolor[]       = "#4C566A";
+static char normfgcolor[]       = "#bbbbbb";
+static char selfgcolor[]       = "#eeeeee";
+static char selbgcolor[]        = "#005577";
+static char selbordercolor[]  = "#ABB1BB";
+static char urgbordercolor[]   = "#ff0000";
+
+static char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_nord_white  },
-	[SchemeUrg]  = { col_gray4, col_cyan,  col_urgborder  },
+	[SchemeNorm] = { normfgcolor, normbgcolor, normbordercolor },
+	[SchemeSel]  = { selfgcolor, selbgcolor,  selbordercolor  },
+	[SchemeUrg]  = { selfgcolor, selbgcolor,  urgbordercolor  },
 };
 
 static const Inset default_inset = {
@@ -63,9 +63,9 @@ static const Rule rules[] = {
 };
 
 /* layout(s) */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
-static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
+static float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
+static int nmaster     = 1;    /* number of clients in master area */
+static int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -95,6 +95,25 @@ static const MonitorRule monrules[] = {
 	{  -1,      -1,  0,      -1,    -1,      -1,      -1     },
 };
 
+/*
+ * Xresources preferences to load at startup
+ */
+ResourcePref resources[] = {
+		{ "normbgcolor",        STRING,  &normbgcolor },
+		{ "normbordercolor",    STRING,  &normbordercolor },
+		{ "normfgcolor",        STRING,  &normfgcolor },
+		{ "selbgcolor",         STRING,  &selbgcolor },
+		{ "selbordercolor",     STRING,  &selbordercolor },
+		{ "selfgcolor",         STRING,  &selfgcolor },
+		{ "borderpx",          	INTEGER, &borderpx },
+		{ "snap",          		INTEGER, &snap },
+		{ "showbar",          	INTEGER, &showbar },
+		{ "topbar",          	INTEGER, &topbar },
+		{ "nmaster",          	INTEGER, &nmaster },
+		{ "resizehints",       	INTEGER, &resizehints },
+		{ "mfact",      	 	FLOAT,   &mfact },
+};
+
 /* key definitions */
 #define MODKEY Mod1Mask
 #define TAGKEYS(KEY,TAG) \
@@ -108,7 +127,7 @@ static const MonitorRule monrules[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
 static const char *rofiruncmd[] = { "rofi", "-show", "run", "-font", "Noto Sans 12", "-theme", "materia", NULL };
 static const char *rofidruncmd[] = { "rofi", "-show", "drun", "-font", "Noto Sans 12", "-theme", "clean", NULL };
 static const char *termcmd[]  = { "st", NULL };
@@ -197,7 +216,6 @@ static Key keys[] = {
 	TAGKEYS(                        XK_plus,                      8)
 	TAGKEYS(                        XK_bracketright,                      9)
 	{ MODKEY,                       XK_q,      killclient,     {0} },
-	{ MODKEY,                       XK_x,      killclient,     {0} },
 	{ MODKEY|ShiftMask, XK_x,      quit,           {0} },
 	{ MODKEY|ShiftMask,             XK_r,      quit,      {1} },
 	{ ShiftMask|ControlMask,        XK_braceleft,      spawn,      { .v = flameshotcmd } },

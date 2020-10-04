@@ -1,0 +1,66 @@
+From 97f3177bc58d8b08ead7ac8a0142e81cd8bcb49c Mon Sep 17 00:00:00 2001
+From: bakkeby <bakkeby@gmail.com>
+Date: Wed, 29 Jul 2020 11:19:33 +0200
+Subject: [PATCH 2/2] Monitor rules patch on top of pertag
+
+This patch allows the user to define layout, mfact, nmaster, showbar,
+and topbar settings on a per monitor basis. An example use case could
+be to have a layout with a horizontal split for a secondary vertical
+monitor.
+
+https://github.com/bakkeby/patches/wiki/monitorrules
+---
+
+diff --git a/dwm.c b/dwm.c
+index 55f8f92..ba8c44a 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -642,28 +652,32 @@ configurerequest(XEvent *e)
+ Monitor *
+ createmon(void)
+ {
+-	Monitor *m;
+-	int i;
++	}
++
+ 	if (!(m->pertag = (Pertag *)calloc(1, sizeof(Pertag))))
+ 		die("fatal: could not malloc() %u bytes\n", sizeof(Pertag));
+ 	m->pertag->curtag = m->pertag->prevtag = 1;
+-	for (i = 0; i <= LENGTH(tags); i++) {
+-		/* init nmaster */
+-		m->pertag->nmasters[i] = m->nmaster;
+-
+-		/* init mfacts */
+-		m->pertag->mfacts[i] = m->mfact;
+ 
++	for (i = 0; i <= LENGTH(tags); i++) {
+ 		/* init layouts */
+-		m->pertag->ltidxs[i][0] = m->lt[0];
+-		m->pertag->ltidxs[i][1] = m->lt[1];
+ 		m->pertag->sellts[i] = m->sellt;
+ 
+-		/* init showbar */
+-		m->pertag->showbars[i] = m->showbar;
+-
+ 		/* swap focus and zoomswap*/
+ 		m->pertag->prevzooms[i] = NULL;
++
++		for (j = 0; j < LENGTH(monrules); j++) {
++			mr = &monrules[j];
++			if ((mr->monitor == -1 || mr->monitor == mi) && (mr->tag == -1 || mr->tag == i)) {
++				layout = MAX(mr->layout, 0);
++				layout = MIN(layout, LENGTH(layouts) - 1);
++				m->pertag->ltidxs[i][0] = &layouts[layout];
++				m->pertag->ltidxs[i][1] = m->lt[0];
++				m->pertag->nmasters[i] = (mr->nmaster > -1 ? mr->nmaster : m->nmaster);
++				m->pertag->mfacts[i] = (mr->mfact > -1 ? mr->mfact : m->mfact);
++				m->pertag->showbars[i] = (mr->showbar > -1 ? mr->showbar : m->showbar);
++				break;
++			}
++		}
+ 	}
+ 	return m;
+ }
+-- 
+2.19.1
+
