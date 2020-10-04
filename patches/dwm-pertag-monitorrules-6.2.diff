@@ -15,48 +15,12 @@ diff --git a/dwm.c b/dwm.c
 index 55f8f92..ba8c44a 100644
 --- a/dwm.c
 +++ b/dwm.c
-@@ -642,38 +652,64 @@ configurerequest(XEvent *e)
+@@ -642,28 +652,32 @@ configurerequest(XEvent *e)
  Monitor *
  createmon(void)
  {
 -	Monitor *m;
 -	int i;
--
-+	Monitor *m, *mon;
-+	int i, mi, j, layout;
-+	const MonitorRule *mr;
- 	m = ecalloc(1, sizeof(Monitor));
- 	m->tagset[0] = m->tagset[1] = 1;
- 	m->mfact = mfact;
- 	m->nmaster = nmaster;
- 	m->showbar = showbar;
- 	m->topbar = topbar;
--	m->lt[0] = &layouts[0];
--	m->lt[1] = &layouts[1 % LENGTH(layouts)];
--	strncpy(m->ltsymbol, layouts[0].symbol, sizeof m->ltsymbol);
-+
-+	for (mi = 0, mon = mons; mon; mon = mon->next, mi++);
-+	for (j = 0; j < LENGTH(monrules); j++) {
-+		mr = &monrules[j];
-+		if ((mr->monitor == -1 || mr->monitor == mi)
-+				&& (mr->tag <= 0 || (m->tagset[0] & (1 << (mr->tag - 1))))
-+		) {
-+			layout = MAX(mr->layout, 0);
-+			layout = MIN(layout, LENGTH(layouts) - 1);
-+			m->lt[0] = &layouts[layout];
-+			m->lt[1] = &layouts[1 % LENGTH(layouts)];
-+			strncpy(m->ltsymbol, layouts[layout].symbol, sizeof m->ltsymbol);
-+
-+			if (mr->mfact > -1)
-+				m->mfact = mr->mfact;
-+			if (mr->nmaster > -1)
-+				m->nmaster = mr->nmaster;
-+			if (mr->showbar > -1)
-+				m->showbar = mr->showbar;
-+			if (mr->topbar > -1)
-+				m->topbar = mr->topbar;
-+			break;
-+		}
 +	}
 +
  	if (!(m->pertag = (Pertag *)calloc(1, sizeof(Pertag))))
