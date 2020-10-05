@@ -24,12 +24,12 @@ static const char *fonts[]       = { "Open Sans:size=10" };
 static const char dmenufont[]    = "Open Sans:size=10";
 
 static char normbgcolor[]        = "#222222";
-static char normbordercolor[]    = "#4C566A";
+static char normbordercolor[]    = "#665c54";
 static char normfgcolor[]        = "#bbbbbb";
 static char normmarkcolor[]      = "#B48EAD";
 static char selfgcolor[]         = "#eeeeee";
 static char selbgcolor[]         = "#005577";
-static char selbordercolor[]     = "#ABB1BB";
+static char selbordercolor[]     = "#d5c4a1";
 static char selmarkcolor[]       = "#5E81AC";
 static char urgbordercolor[]     = "#ff0000";
 
@@ -48,7 +48,7 @@ static const Inset default_inset = {
 };
 
 /* tagging */
-static const char *tags[] = { "", "", "", "", "ﱅ", "", "", "", "漣", "" };
+static const char *tags[] = { "", "", "", "", "ﱅ", "", "", "", "漣", "" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -56,16 +56,18 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 +	 *  WM_WINDOW_ROLE(STRING) = role
 	 */
-	/* class              role     instance  title           tags mask     isfloating   isterminal  noswallow  monitor   float x,y,w,h       fborder */
-	{ "st-256color",      NULL,    NULL,     NULL,           0,            0,           1,           0,        -1,        100, 100, 50, 50,    4},
-	{ "Opera",            NULL,    NULL,     NULL,           1 << 1,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
-	{ "Chromium",         NULL,    NULL,     NULL,           1 << 1,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
-	{ "Spotify",          NULL,    NULL,     NULL,           1 << 6,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
-	{ "Bitwarden",        NULL,    NULL,     NULL,           1 << 9,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
-	{ "tutanota-desktop", NULL,    NULL,     NULL,           1 << 8,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
-	{ "Firefox",          NULL,    NULL,     NULL,           1 << 1,       0,           0,          -1,        -1 },
-	{ "Emacs",            NULL,    NULL,     NULL,           1 << 3,       0,           0,          -1,        -1 },
-	{ NULL,               NULL,    NULL,     "Event Tester", 0,            0,           0,           1,        -1 }, /* xev */
+	/* class              role     instance      title           tags mask     isfloating   isterminal  noswallow  monitor   float x,y,w,h       fborder */
+	{ "st-256color",      NULL,    NULL,         NULL,           0,            0,           1,           0,        -1,        100, 100, 50, 50,    3},
+	{ "st-256color",      NULL,    "files",      NULL,           1 << 0,       0,           1,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "st-256color",      NULL,    "secondary",  NULL,           1 << 0,       0,           1,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "Opera",            NULL,    NULL,         NULL,           1 << 1,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "Chromium",         NULL,    NULL,         NULL,           1 << 1,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "Spotify",          NULL,    NULL,         NULL,           1 << 6,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "Bitwarden",        NULL,    NULL,         NULL,           1 << 9,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "tutanota-desktop", NULL,    NULL,         NULL,           1 << 8,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "Firefox",          NULL,    NULL,         NULL,           1 << 1,       0,           0,          -1,        -1 },
+	{ "Emacs",            NULL,    NULL,         NULL,           1 << 3,       0,           0,          -1,        -1 },
+	{ NULL,               NULL,    NULL,         "Event Tester", 0,            0,           0,           1,        -1 }, /* xev */
 };
 
 /* layout(s) */
@@ -135,9 +137,6 @@ ResourcePref resources[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
 static const char *rofiruncmd[] = { "rofi", "-show", "run", "-font", "Noto Sans 12", "-theme", "materia", NULL };
 static const char *rofidruncmd[] = { "rofi", "-show", "drun", "-font", "Noto Sans 12", "-theme", "clean", NULL };
 static const char *roficalccmd[] = { "rofi", "-show", "calc", "-modi", "calc", "-no-show-match", "-no-sort", "-font", "Noto Sans 12", "-theme", "materia", NULL };
@@ -146,6 +145,9 @@ static const char *termcmd[]  = { "st", NULL };
 static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
 static const char *flameshotcmd[]  = { "flameshot", "gui", NULL };
+
+static const char *filestermcmd[]  = { "st", "-n", "files", "-e", "fish", "-C" "ranger", NULL };
+static const char *nftermcmd[]  = { "st", "-n", "secondary", "-e", "fish", "-C" "neofetch", NULL };
 
 /* Brightness, volume & media commands */
 static const char *volumeupcmd[]  = { "pulsemixer", "--change-volume", "+10", NULL };
@@ -257,6 +259,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Return,       spawn,          {.v = termcmd } },
 	{ ShiftMask|ControlMask,        XK_braceleft,    spawn,          { .v = flameshotcmd } },
 	{ 0,                            0xff61,           spawn,          { .v = flameshotcmd } },
+	{ MODKEY,                       0xff96,           spawn,          {.v = filestermcmd } },
+	{ MODKEY,                       0xff9d,           spawn,          {.v = nftermcmd } },
 
 	/**** Brightness, volume & media keys ****/
 	// Audio
