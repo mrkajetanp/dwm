@@ -145,6 +145,7 @@ static const char *termcmd[]  = { "st", NULL };
 static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
 static const char *flameshotcmd[]  = { "flameshot", "gui", NULL };
+static const char *lockscreencmd[]  = { "betterlockscreen", "--lock", NULL };
 
 static const char *filestermcmd[]  = { "st", "-n", "files", "-e", "fish", "-C" "ranger", NULL };
 static const char *nftermcmd[]  = { "st", "-n", "secondary", "-e", "fish", "-C" "neofetch", NULL };
@@ -250,6 +251,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_q,            killclient,     {0} },
 	{ MODKEY|ShiftMask,             XK_c,            killclient,     {0} },
 	{ MODKEY|ShiftMask,             XK_x,            quit,           {0} },
+	{ MODKEY|ControlMask|ShiftMask, XK_x,            spawn,          {.v = lockscreencmd } },
 	{ MODKEY|ShiftMask,             XK_r,            quit,           {1} },
 
 	/**** Custom launch commands ****/
@@ -257,8 +259,8 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_d,            spawn,          {.v = rofiruncmd } },
 	{ MODKEY|ControlMask,           XK_d,            spawn,          {.v = roficalccmd } },
 	{ MODKEY,                       XK_Return,       spawn,          {.v = termcmd } },
-	{ ShiftMask|ControlMask,        XK_braceleft,    spawn,          { .v = flameshotcmd } },
-	{ 0,                            0xff61,           spawn,          { .v = flameshotcmd } },
+	{ ShiftMask|ControlMask,        XK_braceleft,    spawn,          {.v = flameshotcmd } },
+	{ 0,                            0xff61,           spawn,          {.v = flameshotcmd } },
 	{ MODKEY,                       0xff96,           spawn,          {.v = filestermcmd } },
 	{ MODKEY,                       0xff9d,           spawn,          {.v = nftermcmd } },
 
