@@ -6,7 +6,7 @@ static unsigned int borderpx     = 3;        /* border pixel of windows */
 static unsigned int snap         = 32;       /* snap pixel */
 static int rmaster               = 0;        /* 1 means master-area is initially on the right */
 static int swallowfloating       = 0;        /* 1 means swallow floating windows by default */
-static unsigned int gappx        = 10;       /* gap between windows */
+static const Gap default_gap     = {.isgap = 1, .realgap = 10, .gappx = 10};
 static unsigned int cornerrad    = 6;        /* corner radius */
 
 static int showbar               = 1;        /* 0 means no bar */
@@ -120,7 +120,7 @@ ResourcePref resources[] = {
 		{ "nmaster",          	INTEGER,  &nmaster },
 		{ "resizehints",       	INTEGER,  &resizehints },
 		{ "mfact",      	 	FLOAT,    &mfact },
-		{ "gappx",          	INTEGER,  &gappx },
+		/* { "gappx",          	INTEGER,  &gappx }, */
 		{ "cornerrad",       	INTEGER,  &cornerrad },
 		{ "rmaster",       	    INTEGER,  &rmaster },
 };
@@ -202,6 +202,11 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_space,        togglefloating, {0} },
 	{ MODKEY,                       XK_f,            togglefullscr,  {0} },
 	{ MODKEY,                       XK_b,            togglebar,      {0} },
+
+	{ MODKEY|ShiftMask,              XK_slash,  setgaps,        {.i = -5 } },
+	{ MODKEY|ShiftMask,             XK_at,  setgaps,        {.i = +5 } },
+	{ MODKEY|ControlMask|ShiftMask,             XK_slash,  setgaps,        {.i = GAP_RESET } },
+	{ MODKEY|ControlMask|ShiftMask,             XK_at,  setgaps,        {.i = GAP_TOGGLE} },
 
     { MODKEY,                       XK_minus, togglemark,   {0} },
     { MODKEY,                       XK_slash,      swapfocus,      {0} },
