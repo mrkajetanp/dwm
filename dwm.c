@@ -371,6 +371,8 @@ static pid_t winpid(Window w);
 
 static void bstack(Monitor *m);
 static void bstackhoriz(Monitor *m);
+static void tstack(Monitor *m);
+static void tstackhoriz(Monitor *m);
 static void centeredmaster(Monitor *m);
 static void centeredfloatingmaster(Monitor *m);
 static void deck(Monitor *m);
@@ -3691,6 +3693,75 @@ bstackhoriz(Monitor *m)
 				ty += HEIGHT(c);
 			sfacts -= c->cfact;
 		}
+}
+
+static void
+tstack(Monitor *m) {
+	int w, h, mh, mx, tx, ty, tw;
+	unsigned int i, n;
+	Client *c;
+
+	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
+
+	if (n == 0)
+		return;
+
+	if(n == 1){
+		c = nexttiled(m->clients);
+		resize(c, m->wx + m->gap->gappx, m->wy + m->gap->gappx, m->ww - 2 * c->bw - 2*m->gap->gappx, m->wh - 2 * c->bw - 2*m->gap->gappx, 0);
+		return;
+	}
+
+	mh = m->mfact * m->wh;
+	if (n > m->nmaster) {
+		tw = m->ww / (n - m->nmaster);
+		ty = m->wy;
+	} else {
+		tw = m->ww;
+		ty = m->wy + mh;
+	}
+	for (i = mx = 0, tx = m->wx, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
+		if (i < m->nmaster) {
+			w = (m->ww - mx) / (MIN(n, m->nmaster) - i) - m->gap->gappx;
+			resize(c, m->wx + mx + m->gap->gappx, m->wy + (m->wh - mh), w - (2 * c->bw) - m->gap->gappx, mh - (2 * c->bw) - m->gap->gappx, 0);
+			mx += WIDTH(c) + m->gap->gappx;
+		} else {
+			h = m->wh - mh - m->gap->gappx;
+			resize(c, tx + m->gap->gappx, ty + m->gap->gappx, tw - (2 * c->bw) - (m->gap->gappx*1.5), h - (2 * c->bw) - m->gap->gappx, 0);
+			if (tw != m->ww)
+				tx += WIDTH(c) + m->gap->gappx;
+		}
+	}
+}
+
+static void
+tstackhoriz(Monitor *m) {
+	int w, mh, mx, tx, ty, th;
+	unsigned int i, n;
+	Client *c;
+
+	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
+	if (n == 0)
+		return;
+	mh = m->mfact * m->wh;
+	if (n > m->nmaster) {
+		th = (m->wh - mh) / (n - m->nmaster);
+		ty = m->wy;
+	} else {
+		th = mh;
+		ty = m->wy + mh;
+	}
+	for (i = mx = 0, tx = m->wx, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
+		if (i < m->nmaster) {
+			w = (m->ww - mx) / (MIN(n, m->nmaster) - i);
+			resize(c, m->wx + mx, m->wy + (m->wh - mh), w - (2 * c->bw), mh - (2 * c->bw), 0);
+			mx += WIDTH(c);
+		} else {
+			resize(c, tx, ty, m->ww - (2 * c->bw), th - (2 * c->bw), 0);
+			if (th != m->wh)
+				ty += HEIGHT(c);
+		}
+	}
 }
 
 void deck(Monitor *m) {

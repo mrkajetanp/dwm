@@ -6,8 +6,8 @@ static unsigned int borderpx     = 3;        /* border pixel of windows */
 static unsigned int snap         = 32;       /* snap pixel */
 static int rmaster               = 0;        /* 1 means master-area is initially on the right */
 static int swallowfloating       = 0;        /* 1 means swallow floating windows by default */
-static const Gap default_gap     = {.isgap = 1, .realgap = 10, .gappx = 10};
 static unsigned int cornerrad    = 6;        /* corner radius */
+static Gap default_gap     = {.isgap = 1, .realgap = 10, .gappx = 10};
 
 static int showbar               = 1;        /* 0 means no bar */
 static int topbar                = 1;        /* 0 means bottom bar */
@@ -87,6 +87,8 @@ static const Layout layouts[] = {
 	{ "(Deck)",      deck },
 	{ "(Grid)",      grid },
 	{ "(Tatami)",      tatami },
+	{ "(TStack)",      tstack },
+	{ "(TStack (H))",      tstackhoriz },
 	{ NULL,       NULL },
 };
 
@@ -120,7 +122,7 @@ ResourcePref resources[] = {
 		{ "nmaster",          	INTEGER,  &nmaster },
 		{ "resizehints",       	INTEGER,  &resizehints },
 		{ "mfact",      	 	FLOAT,    &mfact },
-		/* { "gappx",          	INTEGER,  &gappx }, */
+		{ "gappx",          	INTEGER,  &(default_gap.gappx) },
 		{ "cornerrad",       	INTEGER,  &cornerrad },
 		{ "rmaster",       	    INTEGER,  &rmaster },
 };
@@ -225,12 +227,14 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_f,            setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,            setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_u,            setlayout,      {.v = &layouts[3]} },
-	{ MODKEY,                       XK_o,            setlayout,      {.v = &layouts[4]} },
+	{ MODKEY|ShiftMask,             XK_u,            setlayout,      {.v = &layouts[4]} },
 	{ MODKEY,                       XK_c,            setlayout,      {.v = &layouts[5]} },
 	{ MODKEY|ControlMask,           XK_c,            setlayout,      {.v = &layouts[6]} },
 	{ MODKEY,                       XK_r,            setlayout,      {.v = &layouts[7]} },
 	{ MODKEY,                       XK_g,            setlayout,      {.v = &layouts[8]} },
 	{ MODKEY|ShiftMask,             XK_t,            setlayout,      {.v = &layouts[9]} },
+	{ MODKEY,                       XK_o,            setlayout,      {.v = &layouts[10]} },
+	{ MODKEY|ShiftMask,             XK_o,            setlayout,      {.v = &layouts[11]} },
 	{ MODKEY|ControlMask,		    XK_comma,        cyclelayout,    {.i = -1 } },
 	{ MODKEY|ControlMask,           XK_period,       cyclelayout,    {.i = +1 } },
 
