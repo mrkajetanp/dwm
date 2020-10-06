@@ -3623,9 +3623,10 @@ bstack(Monitor *m)
 	}
 	if (n == 0)
 		return;
+
 	if(n == 1){
 		c = nexttiled(m->clients);
-		resize(c, m->wx, m->wy, m->ww - 2 * c->bw, m->wh - 2 * c->bw, 0);
+		resize(c, m->wx + m->gap->gappx, m->wy + m->gap->gappx, m->ww - 2 * c->bw - 2*m->gap->gappx, m->wh - 2 * c->bw - 2*m->gap->gappx, 0);
 		return;
 	}
 
@@ -3635,16 +3636,16 @@ bstack(Monitor *m)
 		mh = m->wh;
 	for (i = 0, mx = tx = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
 		if (i < m->nmaster) {
-			w = (m->ww - mx) * (c->cfact / mfacts);
-			resize(c, m->wx + mx, m->wy, w - (2*c->bw), mh - 2*c->bw, 0);
-			if(mx + WIDTH(c) < m->mw)
-				mx += WIDTH(c);
+			w = (m->ww - mx) * (c->cfact / mfacts) - m->gap->gappx;
+			resize(c, m->wx + mx + m->gap->gappx, m->wy + m->gap->gappx, w - (2*c->bw) - m->gap->gappx, mh - 2*c->bw - m->gap->gappx, 0);
+			if(mx + WIDTH(c) + m->gap->gappx < m->mw)
+				mx += WIDTH(c) + m->gap->gappx;
 			mfacts -= c->cfact;
 		} else {
-			w = (m->ww - tx) * (c->cfact / sfacts);
-			resize(c, m->wx + tx, m->wy + mh, w - (2*c->bw), m->wh - mh - 2*(c->bw), 0);
-			if(tx + WIDTH(c) < m->mw)
-				tx += WIDTH(c);
+			w = (m->ww - tx) * (c->cfact / sfacts) - m->gap->gappx;
+			resize(c, m->wx + tx + m->gap->gappx, m->wy + mh + m->gap->gappx, w - (2*c->bw) - m->gap->gappx, m->wh - mh - 2*(c->bw) - 2*m->gap->gappx, 0);
+			if(tx + WIDTH(c) + m->gap->gappx < m->mw)
+				tx += WIDTH(c) + m->gap->gappx;
 			sfacts -= c->cfact;
 		}
 }
@@ -3744,7 +3745,7 @@ void grid(Monitor *m) {
 		/* adjust height/width of last row/column's windows */
 		ah = ((i + 1) % rows == 0) ? m->wh - ch * rows : 0;
 		aw = (i >= rows * (cols - 1)) ? m->ww - cw * cols : 0;
-		resize(c, cx, cy, cw - 2 * c->bw + aw, ch - 2 * c->bw + ah, False);
+		resize(c, cx + m->gap->gappx, cy + m->gap->gappx, cw - 2 * c->bw + aw - 2*m->gap->gappx, ch - 2 * c->bw + ah - 2*m->gap->gappx, False);
 		i++;
 	}
 }
