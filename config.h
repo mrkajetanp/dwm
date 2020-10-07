@@ -57,7 +57,7 @@ static const Rule rules[] = {
 +	 *  WM_WINDOW_ROLE(STRING) = role
 	 */
 	/* class              role     instance      title           tags mask     isfloating   isterminal  noswallow  monitor   float x,y,w,h       fborder */
-	{ "st-256color",      NULL,    NULL,         NULL,           0,            0,           1,           0,        -1,        100, 100, 50, 50,    3},
+	{ "st-256color",      NULL,    NULL,         NULL,           0,            0,           1,           0,        -1,        100, 100, 50, 50,    0},
 	{ "st-256color",      NULL,    "files",      NULL,           1 << 0,       0,           1,           0,        -1,        -1,  -1,  -1, -1,    -1 },
 	{ "st-256color",      NULL,    "secondary",  NULL,           1 << 0,       0,           1,           0,        -1,        -1,  -1,  -1, -1,    -1 },
 	{ "Opera",            NULL,    NULL,         NULL,           1 << 1,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
@@ -89,6 +89,8 @@ static const Layout layouts[] = {
 	{ "(Tatami)",      tatami },
 	{ "(TStack)",      tstack },
 	{ "(TStack (H))",      tstackhoriz },
+	{ "(Spiral)",      spiral },
+	{ "(Dwindle)",      dwindle },
 	{ NULL,       NULL },
 };
 
@@ -223,18 +225,20 @@ static Key keys[] = {
 	{ MODKEY|ControlMask|ShiftMask, XK_period,       tagallmon,      {.i = -1 } },
 
 	/**** Switching layouts ****/
-	{ MODKEY,                       XK_t,            setlayout,      {.v = &layouts[0]} },
-	{ MODKEY|ShiftMask,             XK_f,            setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,            setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,                       XK_u,            setlayout,      {.v = &layouts[3]} },
-	{ MODKEY|ShiftMask,             XK_u,            setlayout,      {.v = &layouts[4]} },
-	{ MODKEY,                       XK_c,            setlayout,      {.v = &layouts[5]} },
-	{ MODKEY|ControlMask,           XK_c,            setlayout,      {.v = &layouts[6]} },
-	{ MODKEY,                       XK_r,            setlayout,      {.v = &layouts[7]} },
-	{ MODKEY,                       XK_g,            setlayout,      {.v = &layouts[8]} },
-	{ MODKEY|ShiftMask,             XK_t,            setlayout,      {.v = &layouts[9]} },
-	{ MODKEY,                       XK_o,            setlayout,      {.v = &layouts[10]} },
-	{ MODKEY|ShiftMask,             XK_o,            setlayout,      {.v = &layouts[11]} },
+	{ MODKEY,                       XK_t,            setlayout,      {.v = &layouts[0]} }, /* Tiled */
+	{ MODKEY|ShiftMask,             XK_f,            setlayout,      {.v = &layouts[1]} }, /* Floating */
+	{ MODKEY,                       XK_m,            setlayout,      {.v = &layouts[2]} }, /* Monocle */
+	{ MODKEY,                       XK_u,            setlayout,      {.v = &layouts[3]} }, /* Bstack */
+	{ MODKEY|ShiftMask,             XK_u,            setlayout,      {.v = &layouts[4]} }, /* Bstack Horiz */
+	{ MODKEY,                       XK_c,            setlayout,      {.v = &layouts[5]} }, /* Centered */
+	{ MODKEY|ControlMask,           XK_c,            setlayout,      {.v = &layouts[6]} }, /* Centered floating */
+	{ MODKEY|ShiftMask,             XK_m,            setlayout,      {.v = &layouts[7]} }, /* Deck */
+	{ MODKEY,                       XK_g,            setlayout,      {.v = &layouts[8]} }, /* Grid */
+	{ MODKEY|ShiftMask,             XK_t,            setlayout,      {.v = &layouts[9]} }, /* Tatami */
+	{ MODKEY,                       XK_o,            setlayout,      {.v = &layouts[10]} }, /* Tstack */
+	{ MODKEY|ShiftMask,             XK_o,            setlayout,      {.v = &layouts[11]} }, /* Tstack horiz */
+	{ MODKEY,                       XK_r,            setlayout,      {.v = &layouts[12]} }, /* Spiral */
+
 	{ MODKEY|ControlMask,		    XK_comma,        cyclelayout,    {.i = -1 } },
 	{ MODKEY|ControlMask,           XK_period,       cyclelayout,    {.i = +1 } },
 
