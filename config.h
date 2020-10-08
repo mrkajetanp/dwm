@@ -20,6 +20,7 @@ static const int sidepad         = 5;        /* horizontal bar padding */
 
 static const int viewontag       = 1;        /* Switch view on tag switch */
 
+
 static const char *fonts[]       = { "Open Sans:size=10" };
 static const char dmenufont[]    = "Open Sans:size=10";
 
@@ -97,7 +98,7 @@ static const Layout layouts[] = {
 static const MonitorRule monrules[] = {
 	/* monitor  tag  layout  mfact  nmaster  showbar  topbar */
 	// Main monitor
-	{  0,      1,  0,      -1,    -1,      -1,      -1     },
+	{  0,      1,  12,      -1,    -1,      -1,      -1     },
 	{  0,      2,  2,      -1,    -1,      -1,      -1     },
 	{  0,      4,  2,      -1,    -1,      -1,      -1     },
 	// Secondary monitor
@@ -151,8 +152,8 @@ static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34
 static const char *flameshotcmd[]  = { "flameshot", "gui", NULL };
 static const char *lockscreencmd[]  = { "betterlockscreen", "--lock", NULL };
 
-static const char *filestermcmd[]  = { "st", "-n", "files", "-e", "fish", "-C" "ranger", NULL };
-static const char *nftermcmd[]  = { "st", "-n", "secondary", "-e", "fish", "-C" "neofetch", NULL };
+static const char *filestermcmd[]  = { "st", "-n", "files", "-e", "fish", "-C", "np", NULL };
+static const char *nftermcmd[]  = { "st", "-n", "secondary", "-e", "fish", "-C", "neofetch", NULL };
 
 /* Brightness, volume & media commands */
 static const char *volumeupcmd[]  = { "pulsemixer", "--change-volume", "+10", NULL };
