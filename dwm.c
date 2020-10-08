@@ -383,6 +383,8 @@ static void dwindle(Monitor *mon);
 
 static void roundcorners(Client *c);
 
+static void togglekeys(const Arg* arg);
+
 /* variables */
 static const char autostartblocksh[] = "autostart_blocking.sh";
 static const char autostartsh[] = "autostart.sh";
@@ -1373,11 +1375,29 @@ keypress(XEvent *e)
 
 	ev = &e->xkey;
 	keysym = XKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0);
+
+	if (!enablekeys) {
+		for (i = 0; i < LENGTH(keys); i++)
+			if (keys[i].func == togglekeys
+				&& keysym == keys[i].keysym
+				&& CLEANMASK(keys[i].mod) == CLEANMASK(ev->state)) {
+				enablekeys = 1;
+				return;
+			}
+		return;
+	}
+
 	for (i = 0; i < LENGTH(keys); i++)
 		if (keysym == keys[i].keysym
 		&& CLEANMASK(keys[i].mod) == CLEANMASK(ev->state)
 		&& keys[i].func)
 			keys[i].func(&(keys[i].arg));
+}
+
+void
+togglekeys(const Arg* arg)
+{
+	enablekeys ^= 1;
 }
 
 int

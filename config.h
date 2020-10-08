@@ -11,6 +11,9 @@ static Gap default_gap     = {.isgap = 1, .realgap = 10, .gappx = 10};
 
 static int showbar               = 1;        /* 0 means no bar */
 static int topbar                = 1;        /* 0 means bottom bar */
+
+static int enablekeys = 1;
+
 static const int usealtbar       = 1;        /* 1 means use non-dwm status bar */
 static const char *altbarclass   = "Polybar";/* Alternate bar class name */
 static const char *altbarcmd     = "$HOME/.config/polybar/launch.sh"; /* Alternate bar launch command */
@@ -178,6 +181,8 @@ static const char *kbdbrightnessdowncmdslow[]  = { "light", "-s", "sysfs/leds/sm
 
 static Key keys[] = {
 	/* modifier                     key              function        argument */
+	{ MODKEY,                       0xff9a,           togglekeys,     {0} },
+
 	/**** Navigation ****/
 	{ MODKEY,                       XK_j,            focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,            focusstack,     {.i = -1 } },
