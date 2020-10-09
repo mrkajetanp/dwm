@@ -145,9 +145,9 @@ ResourcePref resources[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static const char *rofiruncmd[] = { "rofi", "-show", "run", "-font", "Noto Sans 12", "-theme", "materia", NULL };
+static const char *rofiruncmd[] = { "rofi", "-show", "run", "-font", "Noto Sans 12", "-theme", "slate-gruvbox", NULL };
 static const char *rofidruncmd[] = { "rofi", "-show", "drun", "-font", "Noto Sans 12", "-theme", "clean", NULL };
-static const char *roficalccmd[] = { "rofi", "-show", "calc", "-modi", "calc", "-no-show-match", "-no-sort", "-font", "Noto Sans 12", "-theme", "materia", NULL };
+static const char *roficalccmd[] = { "rofi", "-show", "calc", "-modi", "calc", "-no-show-match", "-no-sort", "-font", "Noto Sans 12", "-theme", "slate-gruvbox", NULL };
 static const char *termcmd[]  = { "st", NULL };
 
 static const char scratchpadname[] = "scratchpad";
@@ -158,8 +158,8 @@ static const char *lockscreencmd[]  = { "betterlockscreen", "--lock", NULL };
 static const char *filestermcmd[]  = { "st", "-n", "files", "-e", "fish", "-C", "np", NULL };
 static const char *nftermcmd[]  = { "st", "-n", "secondary", "-e", "fish", "-C", "neofetch", NULL };
 
-static const char* clipboardcmd[] = {"gclipp", NULL};
 
+static const char* roficlipboardcmd[] = {"/home/kajetan/.bin/rofi-clipboard", NULL};
 static const char* rofipasscmd[] = {"rofi-pass", NULL};
 static const char* rofirbwcmd[] = {"/home/kajetan/.bin/rofi-rbw", NULL};
 static const char* rofiemojicmd[] = {"/home/kajetan/.bin/rofi-emoji", NULL};
@@ -291,7 +291,7 @@ static Key keys[] = {
 	{ MODKEY,                       0xff9d,           spawn,          {.v = nftermcmd } },
 
 	/**** Misc ****/
-	{ MODKEY|ControlMask|ShiftMask, XK_c,            spawn,          {.v = clipboardcmd } },
+	{ MODKEY|ControlMask|ShiftMask, XK_c,            spawn,          {.v = roficlipboardcmd } },
 	{ MODKEY,                       XK_w,            spawn,          {.v = rofirbwcmd } },
 	{ MODKEY|ShiftMask,             XK_w,            spawn,          {.v = rofipasscmd } },
 	{ MODKEY|ShiftMask,             XK_e,            spawn,          {.v = rofiemojicmd } },
