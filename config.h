@@ -158,6 +158,14 @@ static const char *lockscreencmd[]  = { "betterlockscreen", "--lock", NULL };
 static const char *filestermcmd[]  = { "st", "-n", "files", "-e", "fish", "-C", "np", NULL };
 static const char *nftermcmd[]  = { "st", "-n", "secondary", "-e", "fish", "-C", "neofetch", NULL };
 
+static const char* clipboardcmd[] = {"gclipp", NULL};
+
+static const char* rofipasscmd[] = {"rofi-pass", NULL};
+static const char* rofirbwcmd[] = {"/home/kajetan/.bin/rofi-rbw", NULL};
+static const char* rofiemojicmd[] = {"/home/kajetan/.bin/rofi-emoji", NULL};
+static const char* rofinmclicmd[] = {"/home/kajetan/.bin/rofi-nmcli", NULL};
+static const char* rofitrcmd[] = {"/home/kajetan/.bin/rofi-tr", NULL};
+
 /* Brightness, volume & media commands */
 static const char *volumeupcmd[]  = { "pulsemixer", "--change-volume", "+10", NULL };
 static const char *volumedowncmd[]  = { "pulsemixer", "--change-volume", "-10", NULL };
@@ -211,7 +219,6 @@ static Key keys[] = {
 	{ MODKEY,                       XK_n,            togglermaster,  {0} },
 	{ MODKEY|ShiftMask,             XK_space,        togglefloating, {0} },
 	{ MODKEY,                       XK_f,            togglefullscr,  {0} },
-	{ MODKEY,                       XK_b,            togglebar,      {0} },
 
 	{ MODKEY|ShiftMask,              XK_slash,  setgaps,        {.i = -5 } },
 	{ MODKEY|ShiftMask,             XK_at,  setgaps,        {.i = +5 } },
@@ -282,6 +289,14 @@ static Key keys[] = {
 	{ 0,                            0xff61,           spawn,          {.v = flameshotcmd } },
 	{ MODKEY,                       0xff96,           spawn,          {.v = filestermcmd } },
 	{ MODKEY,                       0xff9d,           spawn,          {.v = nftermcmd } },
+
+	/**** Misc ****/
+	{ MODKEY|ControlMask|ShiftMask, XK_c,            spawn,          {.v = clipboardcmd } },
+	{ MODKEY,                       XK_w,            spawn,          {.v = rofirbwcmd } },
+	{ MODKEY|ShiftMask,             XK_w,            spawn,          {.v = rofipasscmd } },
+	{ MODKEY|ShiftMask,             XK_e,            spawn,          {.v = rofiemojicmd } },
+	{ MODKEY|ShiftMask,             XK_n,            spawn,          {.v = rofinmclicmd } },
+	{ MODKEY|ControlMask|ShiftMask, XK_t,            spawn,          {.v = rofitrcmd } },
 
 	/**** Brightness, volume & media keys ****/
 	// Audio
