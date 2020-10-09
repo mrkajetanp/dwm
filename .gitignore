@@ -1,5 +1,7 @@
 .ccls-cache/
 .ccls-cache
 .ccls-cache/*
+dwm-msg
 dwm
+dwmc
 *.o
