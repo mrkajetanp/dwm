@@ -155,9 +155,9 @@ static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34
 static const char *flameshotcmd[]  = { "flameshot", "gui", NULL };
 static const char *lockscreencmd[]  = { "betterlockscreen", "--lock", NULL };
 
-static const char *filestermcmd[]  = { "st", "-n", "files", "-e", "fish", "-C", "np", NULL };
-static const char *nftermcmd[]  = { "st", "-n", "secondary", "-e", "fish", "-C", "neofetch", NULL };
-
+static const char *filestermcmd[]  = { "st", "-n", "files", "-e", "abduco", "-A", "files", "fish", "-C", "np", NULL };
+static const char *nftermcmd[]  = { "st", "-n", "secondary", "-e", "abduco", "-A", "second", "fish", "-C", "neofetch", NULL };
+static const char *maintermcmd[]  = { "st", "-n", "main", "-e", "abduco", "-A", "main", "fish", NULL };
 
 static const char* roficlipboardcmd[] = {"/home/kajetan/.bin/rofi-clipboard", NULL};
 static const char* rofipasscmd[] = {"rofi-pass", NULL};
@@ -287,8 +287,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Return,       spawn,          {.v = termcmd } },
 	{ ShiftMask|ControlMask,        XK_braceleft,    spawn,          {.v = flameshotcmd } },
 	{ 0,                            0xff61,           spawn,          {.v = flameshotcmd } },
-	{ MODKEY,                       0xff96,           spawn,          {.v = filestermcmd } },
+	{ MODKEY,                       0xff96,           spawn,          {.v = maintermcmd } },
 	{ MODKEY,                       0xff9d,           spawn,          {.v = nftermcmd } },
+	{ MODKEY,                       0xff98,           spawn,          {.v = filestermcmd } },
 
 	/**** Misc ****/
 	{ MODKEY|ControlMask|ShiftMask, XK_c,            spawn,          {.v = roficlipboardcmd } },
