@@ -60,22 +60,23 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 +	 *  WM_WINDOW_ROLE(STRING) = role
 	 */
-	/* class              role     instance      title           tags mask     isfloating   isterminal  noswallow  monitor   float x,y,w,h       fborder */
-	{ "st-256color",      NULL,    NULL,         NULL,           0,            0,           1,           0,        -1,        100, 100, 50, 50,    0},
-	{ "st-256color",      NULL,    "files",      NULL,           1 << 0,       0,           1,           0,        -1,        -1,  -1,  -1, -1,    -1 },
-	{ "st-256color",      NULL,    "secondary",  NULL,           1 << 0,       0,           1,           0,        -1,        -1,  -1,  -1, -1,    -1 },
-	{ "Opera",            NULL,    NULL,         NULL,           1 << 1,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
-	{ "Chromium",         NULL,    NULL,         NULL,           1 << 1,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
-	{ "Firefox",          NULL,    NULL,         NULL,           1 << 1,       0,           0,          -1,        -1 },
-	{ "code-oss",         NULL,    NULL,         NULL,           1 << 3,       0,           0,          -1,        -1 },
-	{ "Emacs",            NULL,    NULL,         NULL,           1 << 3,       0,           0,          -1,        -1 },
-	{ "Spotify",          NULL,    NULL,         NULL,           1 << 6,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
-	{ "Signal Beta",      NULL,    NULL,         NULL,           1 << 8,       0,           0,          -1,        -1 },
-	{ "tutanota-desktop", NULL,    NULL,         NULL,           1 << 8,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
-	{ "Steam",            NULL,    NULL,         NULL,           1 << 9,       0,           0,          -1,        -1 },
-	{ "Bitwarden",        NULL,    NULL,         NULL,           1 << 9,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
-	{ NULL,               NULL,    NULL,         "Event Tester", 0,            0,           0,           1,        -1 }, /* xev */
-	{ "Dwarf_Fortress",   NULL,    NULL,         "Dwarf Fortress", 0,            0,           0,           1,        -1 },
+	/* class              role     instance      title                           tags mask     isfloating   isterminal  noswallow  monitor   float x,y,w,h       fborder */
+	{ "st-256color",      NULL,    NULL,         NULL,                           0,            0,           1,           0,        -1,        100, 100, 50, 50,    0},
+	{ "st-256color",      NULL,    "files",      NULL,                           1 << 0,       0,           1,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "st-256color",      NULL,    "secondary",  NULL,                           1 << 0,       0,           1,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "Opera",            NULL,    NULL,         NULL,                           1 << 1,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "Chromium",         NULL,    NULL,         NULL,                           1 << 1,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "Firefox",          NULL,    NULL,         NULL,                           1 << 1,       0,           0,          -1,        -1 },
+	{ "code-oss",         NULL,    NULL,         NULL,                           1 << 3,       0,           0,          -1,        -1 },
+	{ "Emacs",            NULL,    NULL,         NULL,                           1 << 3,       0,           0,          -1,        -1 },
+	{ "Spotify",          NULL,    NULL,         NULL,                           1 << 6,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "Signal Beta",      NULL,    NULL,         NULL,                           1 << 8,       0,           0,          -1,        -1 },
+	{ "tutanota-desktop", NULL,    NULL,         NULL,                           1 << 8,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "Steam",            NULL,    NULL,         NULL,                           1 << 9,       0,           0,          -1,        -1 },
+	{ "Bitwarden",        NULL,    NULL,         NULL,                           1 << 9,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ NULL,               NULL,    NULL,         "Android Emulator - Pixel:5554",0,            1,           0,           1,        -1 }, /* xev */
+	{ NULL,               NULL,    NULL,         "Event Tester",                 0,            0,           0,           1,        -1 }, /* xev */
+	{ "Dwarf_Fortress",   NULL,    NULL,         "Dwarf Fortress",               0,            0,           0,           1,        -1 },
 };
 
 /* layout(s) */
