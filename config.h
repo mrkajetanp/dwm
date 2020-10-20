@@ -23,7 +23,6 @@ static const int sidepad         = 5;        /* horizontal bar padding */
 
 static const int viewontag       = 1;        /* Switch view on tag switch */
 
-
 static const char *fonts[]       = { "Open Sans:size=10" };
 static const char dmenufont[]    = "Open Sans:size=10";
 
@@ -106,12 +105,12 @@ static const Layout layouts[] = {
 static const MonitorRule monrules[] = {
 	/* monitor  tag  layout  mfact  nmaster  showbar  topbar */
 	// Main monitor
-	{  0,      1,  12,      -1,    -1,      -1,      -1     },
-	{  0,      2,  2,      -1,    -1,      -1,      -1     },
-	{  0,      4,  2,      -1,    -1,      -1,      -1     },
+	{  0,       1,   12,     -1,    -1,      -1,      -1     },
+	{  0,       2,   2,      -1,    -1,      -1,      -1     },
+	{  0,       4,   2,      -1,    -1,      -1,      -1     },
 	// Secondary monitor
-	{  1,       1,  8,      -1,    -1,      -1,      -1     },
-	{  1,       2,  3,      -1,    -1,      -1,      -1     },
+	{  1,       1,   8,      -1,    -1,      -1,      -1     },
+	{  1,       2,   3,      -1,    -1,      -1,      -1     },
 	// Default
 	{  -1,      -1,  0,      -1,    -1,      -1,      -1     },
 };
@@ -127,14 +126,14 @@ ResourcePref resources[] = {
 		{ "selmarkcolor",       STRING,   &selmarkcolor },
 		{ "normmarkcolor",      STRING,   &normmarkcolor },
 		{ "borderpx",          	INTEGER,  &borderpx },
-		{ "snap",          		INTEGER,  &snap },
+		{ "snap",          		  INTEGER,  &snap },
 		{ "showbar",          	INTEGER,  &showbar },
-		{ "topbar",          	INTEGER,  &topbar },
+		{ "topbar",          	  INTEGER,  &topbar },
 		{ "nmaster",          	INTEGER,  &nmaster },
 		{ "resizehints",       	INTEGER,  &resizehints },
-		{ "mfact",      	 	FLOAT,    &mfact },
-		{ "gappx",          	INTEGER,  &(default_gap.gappx) },
-		{ "cornerrad",       	INTEGER,  &cornerrad },
+		{ "mfact",      	 	    FLOAT,    &mfact },
+		{ "gappx",          	  INTEGER,  &(default_gap.gappx) },
+		{ "cornerrad",       	  INTEGER,  &cornerrad },
 		{ "rmaster",       	    INTEGER,  &rmaster },
 };
 
