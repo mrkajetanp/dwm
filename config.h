@@ -152,7 +152,7 @@ ResourcePref resources[] = {
 static const char *rofiruncmd[] = { "rofi", "-show", "run", "-font", "Noto Sans 12", "-theme", "slate-gruvbox", NULL };
 static const char *rofidruncmd[] = { "rofi", "-show", "drun", "-font", "Noto Sans 12", "-theme", "clean", NULL };
 static const char *roficalccmd[] = { "rofi", "-show", "calc", "-modi", "calc", "-no-show-match", "-no-sort", "-font", "Noto Sans 12", "-theme", "slate-gruvbox", NULL };
-static const char *termcmd[]  = { "st", NULL };
+static const char *termcmd[]  = { "alacritty", NULL };
 
 static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
