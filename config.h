@@ -6,7 +6,7 @@ static unsigned int borderpx     = 3;        /* border pixel of windows */
 static unsigned int snap         = 32;       /* snap pixel */
 static int rmaster               = 0;        /* 1 means master-area is initially on the right */
 static int swallowfloating       = 0;        /* 1 means swallow floating windows by default */
-static unsigned int cornerrad    = 6;        /* corner radius */
+static unsigned int cornerrad    = 0;        /* corner radius */
 static Gap default_gap     = {.isgap = 1, .realgap = 10, .gappx = 10};
 
 static int showbar               = 1;        /* 0 means no bar */
