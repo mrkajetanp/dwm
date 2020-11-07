@@ -3806,14 +3806,14 @@ void deck(Monitor *m) {
 		mw = m->ww;
 	for(i = my = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
 		if(i < m->nmaster) {
-			h = (m->wh - my) * (c->cfact / mfacts);
-			resize(c, m->wx, m->wy + my, mw - (2*c->bw), h - (2*c->bw), False);
-			if (my + HEIGHT(c) < m->wh)
-				my += HEIGHT(c);
+			h = (m->wh - my) * (c->cfact / mfacts) - m->gap->gappx;
+			resize(c, m->wx + m->gap->gappx, m->wy + my + m->gap->gappx, mw - (2*c->bw) - 2*m->gap->gappx, h - (2*c->bw) - m->gap->gappx, False);
+			if (my + HEIGHT(c) + m->gap->gappx < m->wh)
+				my += HEIGHT(c) + m->gap->gappx;
 			mfacts -= c->cfact;
 		}
 		else
-			resize(c, m->wx + mw, m->wy, m->ww - mw - (2*c->bw), m->wh - (2*c->bw), False);
+			resize(c, m->wx + mw, m->wy + m->gap->gappx, m->ww - mw - (2*c->bw) - m->gap->gappx, m->wh - (2*c->bw) - 2*m->gap->gappx, False);
 }
 
 void grid(Monitor *m) {
