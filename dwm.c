@@ -2652,17 +2652,17 @@ tile(Monitor *m)
 		if (i < m->nmaster) {
 			h = (m->wh - my) * (c->cfact / mfacts) - m->gap->gappx;
 			resize(c, (m->rmaster ? m->wx + m->ww - mw : m->wx) + m->gap->gappx,
-			       m->wy + my, mw - (2*c->bw) - m->gap->gappx, h - (2*c->bw), 0);
+			       m->wy + my, mw - (2*c->bw) - 2*m->gap->gappx, h - (2*c->bw), 0);
 			if (my + HEIGHT(c) + m->gap->gappx < m->wh)
 				my += HEIGHT(c) + m->gap->gappx;
-     mfacts -= c->cfact;
+			mfacts -= c->cfact;
 		} else {
 			h = (m->wh - ty) * (c->cfact / sfacts) - m->gap->gappx;
-			resize(c, (m->rmaster ? m->wx : m->wx + mw) + m->gap->gappx, m->wy + ty,
-			       m->ww - mw - (2*c->bw) - 2*m->gap->gappx, h - (2*c->bw), 0);
+			resize(c, (m->rmaster ? m->wx : m->wx + mw), m->wy + ty,
+			       m->ww - mw - (2*c->bw) - m->gap->gappx, h - (2*c->bw), 0);
 			if (ty + HEIGHT(c) + m->gap->gappx < m->wh)
 				ty += HEIGHT(c) + m->gap->gappx;
-     sfacts -= c->cfact;
+			sfacts -= c->cfact;
 		}
 }
 
