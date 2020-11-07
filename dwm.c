@@ -3691,7 +3691,7 @@ bstackhoriz(Monitor *m)
 		return;
 	if(n == 1){
 		c = nexttiled(m->clients);
-		resize(c, m->wx, m->wy, m->ww - 2 * c->bw, m->wh - 2 * c->bw, 0);
+		resize(c, m->wx + m->gap->gappx, m->wy + m->gap->gappx, m->ww - 2 * (c->bw + m->gap->gappx), m->wh - 2 * (c->bw + m->gap->gappx), 0);
 		return;
 	}
 
@@ -3704,15 +3704,15 @@ bstackhoriz(Monitor *m)
 	for (i = ty = 0, my = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
 		if (i < m->nmaster) {
 			h = (mh - my) * (c->cfact / mfacts);
-			resize(c, m->wx, m->wy + my, mw - 2*c->bw, h - 2*c->bw, 0);
+			resize(c, m->wx + m->gap->gappx, m->wy + my + m->gap->gappx, mw - 2*(c->bw + m->gap->gappx), h - 2*c->bw - m->gap->gappx, 0);
 			if(my + HEIGHT(c) < m->mh)
 				my += HEIGHT(c);
 			mfacts -= c->cfact;
 		} else {
-			h = (m->wh - mh - ty) * (c->cfact / sfacts);
-			resize(c, m->wx, m->wy + mh + ty, mw - 2*c->bw, h - (2*c->bw), 0);
-			if(ty + HEIGHT(c) < m->mh)
-				ty += HEIGHT(c);
+			h = (m->wh - mh - ty) * (c->cfact / sfacts) - m->gap->gappx;
+			resize(c, m->wx + m->gap->gappx, m->wy + mh + ty + m->gap->gappx, mw - 2*c->bw - 2*m->gap->gappx, h - (2*c->bw) - m->gap->gappx, 0);
+			if(ty + HEIGHT(c) + m->gap->gappx < m->mh)
+				ty += HEIGHT(c) + m->gap->gappx;
 			sfacts -= c->cfact;
 		}
 }
