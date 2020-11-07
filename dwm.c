@@ -3864,12 +3864,14 @@ void tatami(Monitor *m) {
 	if(n != 1)  nw = m->ww * m->mfact;
 				ny = m->wy;
 
-	resize(c, nx, ny, nw - 2 * c->bw, nh - 2 * c->bw, False);
+	resize(c, nx + m->gap->gappx, ny + m->gap->gappx, nw - 2 * c->bw - 2*m->gap->gappx, nh - 2 * c->bw - 2*m->gap->gappx, False);
 
 	c = nexttiled(c->next);
 
 	nx += nw;
-	nw = m->ww - nw;
+	nw = m->ww - nw - m->gap->gappx;
+	ny += m->gap->gappx;
+	nh -= 2*m->gap->gappx;
 
 	if(n>1)
 	{
@@ -3879,8 +3881,7 @@ void tatami(Monitor *m) {
 
 	nh/=(mats + (tc % 5 > 0));
 
-	for(i = 0; c && (i < (tc % 5)); c = nexttiled(c->next))
-	{
+	for(i = 0; c && (i < (tc % 5)); c = nexttiled(c->next)) {
 		tnw=nw;
 		tnx=nx;
 		tnh=nh;
@@ -3890,25 +3891,29 @@ void tatami(Monitor *m) {
 					case 1://fill
 						break;
 					case 2://up and down
-						if((i % 5) == 0) //up
-						tnh/=2;
+						if((i % 5) == 0) { // up
+							tnh/=2;
+							tnh -= m->gap->gappx/2;
+						}
 						else if((i % 5) == 1) //down
 						{
 							tnh/=2;
+							tnh -= m->gap->gappx/2;
 							tny += nh/2;
+							tny += m->gap->gappx/2;
 						}
 						break;
 					case 3://bottom, up-left and up-right
 						if((i % 5) == 0) //up-left
 						{
-						tnw = nw/2;
-						tnh = (2*nh)/3;
+						tnw = nw/2 - m->gap->gappx/2;
+						tnh = (2*nh)/3 - m->gap->gappx;
 						}
 						else if((i % 5) == 1)//up-right
 						{
-							tnx += nw/2;
-							tnw = nw/2;
-							tnh = (2*nh)/3;
+							tnx += nw/2 + m->gap->gappx/2;
+							tnw = nw/2 - m->gap->gappx/2;
+							tnh = (2*nh)/3 - m->gap->gappx;
 						}
 						else if((i % 5) == 2)//bottom
 						{
@@ -3920,24 +3925,34 @@ void tatami(Monitor *m) {
 						if((i % 5) == 0) //top
 						{
 							tnh = (nh)/4;
+							tnh -= m->gap->gappx/2;
 						}
 						else if((i % 5) == 1)//left
 						{
 							tnw = nw/2;
+							tnw -= m->gap->gappx/2;
 							tny += nh/4;
+							tny += m->gap->gappx/2;
 							tnh = (nh)/2;
+							tnh -= m->gap->gappx;
 						}
 						else if((i % 5) == 2)//right
 						{
 							tnx += nw/2;
+							tnx += m->gap->gappx/2;
 							tnw = nw/2;
+							tnw -= m->gap->gappx/2;
 							tny += nh/4;
+							tny += m->gap->gappx/2;
 							tnh = (nh)/2;
+							tnh -= m->gap->gappx;
 						}
 						else if((i % 5) == 3)//bottom
 						{
 							tny += (3*nh)/4;
+							tny += m->gap->gappx/2;
 							tnh = (nh)/4;
+							tnh -= m->gap->gappx/2;
 						}
 						break;
 				}
@@ -3949,11 +3964,12 @@ void tatami(Monitor *m) {
 
 	for(i = 0; c && (mats>0); c = nexttiled(c->next)) {
 
-			if((i%5)==0)
-			{
-			--mats;
-			if(((tc % 5) > 0)||(i>=5))
-			ny+=nh;
+			if((i%5)==0) {
+				--mats;
+				if(((tc % 5) > 0)||(i>=5)) {
+					ny+=nh + m->gap->gappx;
+					nh -= m->gap->gappx;
+				}
 			}
 
 			tnw=nw;
@@ -3962,33 +3978,32 @@ void tatami(Monitor *m) {
 			tny=ny;
 
 
-			switch(i % 5)
-			{
+			switch(i % 5) {
 				case 0: //top-left-vert
-					tnw = (nw)/3;
-					tnh = (nh*2)/3;
+					tnw = (nw)/3 - m->gap->gappx/2;
+					tnh = (nh*2)/3 - m->gap->gappx/2;
 					break;
 				case 1: //top-right-hor
-					tnx += (nw)/3;
-					tnw = (nw*2)/3;
-					tnh = (nh)/3;
+					tnx += (nw)/3 + m->gap->gappx/2;
+					tnw = (nw*2)/3 - m->gap->gappx/2;
+					tnh = (nh)/3 - m->gap->gappx/2;
 					break;
 				case 2: //center
-					tnx += (nw)/3;
-					tnw = (nw)/3;
-					tny += (nh)/3;
-					tnh = (nh)/3;
+					tnx += (nw)/3 + m->gap->gappx/2;
+					tnw = (nw)/3 - m->gap->gappx;
+					tny += (nh)/3 + m->gap->gappx/2;
+					tnh = (nh)/3 - m->gap->gappx;
 					break;
 				case 3: //bottom-right-vert
-					tnx += (nw*2)/3;
-					tnw = (nw)/3;
-					tny += (nh)/3;
-					tnh = (nh*2)/3;
+					tnx += (nw*2)/3 + m->gap->gappx/2;
+					tnw = (nw)/3 - m->gap->gappx/2;
+					tny += (nh)/3 + m->gap->gappx/2;
+					tnh = (nh*2)/3 - m->gap->gappx/2;
 					break;
 				case 4: //(oldest) bottom-left-hor
-					tnw = (2*nw)/3;
-					tny += (2*nh)/3;
-					tnh = (nh)/3;
+					tnw = (2*nw)/3 - m->gap->gappx/2;
+					tny += (2*nh)/3 + m->gap->gappx/2;
+					tnh = (nh)/3 - m->gap->gappx/2;
 					break;
 				default:
 					break;
