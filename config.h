@@ -18,8 +18,8 @@ static const int usealtbar       = 1;        /* 1 means use non-dwm status bar *
 static const char *altbarclass   = "Polybar";/* Alternate bar class name */
 static const char *altbarcmd     = "$HOME/.config/polybar/launch.sh"; /* Alternate bar launch command */
 
-static const int vertpad         = 5;        /* vertical bar padding */
-static const int sidepad         = 5;        /* horizontal bar padding */
+static const int vertpad         = 0;        /* vertical bar padding */
+static const int sidepad         = 0;        /* horizontal bar padding */
 
 static const int viewontag       = 1;        /* Switch view on tag switch */
 
@@ -45,9 +45,9 @@ static char *colors[][4]      = {
 
 static const Inset default_inset = {
 	.x = 0,
-	.y = 9,
+	.y = 0,
 	.w = 0,
-	.h = 48,
+	.h = 38,
 };
 
 /* tagging */
@@ -60,9 +60,8 @@ static const Rule rules[] = {
 +	 *  WM_WINDOW_ROLE(STRING) = role
 	 */
 	/* class              role     instance      title                           tags mask     isfloating   isterminal  noswallow  monitor   float x,y,w,h       fborder */
+	{ "Alacritty",        NULL,    NULL,         NULL,                           0,            0,           1,           0,        -1,        100, 100, 50, 50,    0},
 	{ "st-256color",      NULL,    NULL,         NULL,                           0,            0,           1,           0,        -1,        100, 100, 50, 50,    0},
-	{ "st-256color",      NULL,    "files",      NULL,                           1 << 0,       0,           1,           0,        -1,        -1,  -1,  -1, -1,    -1 },
-	{ "st-256color",      NULL,    "secondary",  NULL,                           1 << 0,       0,           1,           0,        -1,        -1,  -1,  -1, -1,    -1 },
 	{ "Opera",            NULL,    NULL,         NULL,                           1 << 1,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
 	{ "Chromium",         NULL,    NULL,         NULL,                           1 << 1,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
 	{ "Firefox",          NULL,    NULL,         NULL,                           1 << 1,       0,           0,          -1,        -1 },
@@ -159,9 +158,9 @@ static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34
 static const char *flameshotcmd[]  = { "flameshot", "gui", NULL };
 static const char *lockscreencmd[]  = { "betterlockscreen", "--lock", NULL };
 
-static const char *filestermcmd[]  = { "st", "-n", "files", "-e", "abduco", "-A", "files", "fish", "-C", "np", NULL };
-static const char *nftermcmd[]  = { "st", "-n", "secondary", "-e", "abduco", "-A", "second", "fish", "-C", "neofetch", NULL };
-static const char *maintermcmd[]  = { "st", "-n", "main", "-e", "abduco", "-A", "main", "fish", NULL };
+static const char *filestermcmd[]  = { "alacritty", "-t", "files", "-e", "fish", "-C", "abduco -A files fish -C ls", NULL };
+static const char *nftermcmd[]  = { "alacritty", "-t", "secondary", "-e", "fish", "-C", "abduco -A second fish -C neofetch", NULL };
+static const char *maintermcmd[]  = { "alacritty", "-t", "main", "-e", "fish", "-C", "abduco -A main fish", NULL };
 
 static const char* roficlipboardcmd[] = {"/home/kajetan/.bin/rofi-clipboard", NULL};
 static const char* rofipasscmd[] = {"rofi-pass", NULL};
@@ -193,7 +192,7 @@ static const char *kbdbrightnessdowncmdslow[]  = { "light", "-s", "sysfs/leds/sm
 
 static Key keys[] = {
 	/* modifier                     key              function        argument */
-	{ MODKEY,                       0xff9a,           togglekeys,     {0} },
+	{ MODKEY,                       0xff9a,          togglekeys,     {0} },
 
 	/**** Navigation ****/
 	{ MODKEY,                       XK_j,            focusstack,     {.i = +1 } },
@@ -224,14 +223,14 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_space,        togglefloating, {0} },
 	{ MODKEY,                       XK_f,            togglefullscr,  {0} },
 
-	{ MODKEY|ShiftMask,              XK_slash,  setgaps,        {.i = -5 } },
-	{ MODKEY|ShiftMask,             XK_at,  setgaps,        {.i = +5 } },
-	{ MODKEY|ControlMask|ShiftMask,             XK_slash,  setgaps,        {.i = GAP_RESET } },
-	{ MODKEY|ControlMask|ShiftMask,             XK_at,  setgaps,        {.i = GAP_TOGGLE} },
+	{ MODKEY|ShiftMask,             XK_slash,        setgaps,        {.i = -5 } },
+	{ MODKEY|ShiftMask,             XK_at,           setgaps,        {.i = +5 } },
+	{ MODKEY|ControlMask|ShiftMask, XK_slash,        setgaps,        {.i = GAP_RESET } },
+	{ MODKEY|ControlMask|ShiftMask, XK_at,           setgaps,        {.i = GAP_TOGGLE} },
 
-    { MODKEY,                       XK_minus, togglemark,   {0} },
-    { MODKEY,                       XK_slash,      swapfocus,      {0} },
-    { MODKEY,                       XK_at,      swapclient,     {0} },
+  { MODKEY,                       XK_minus,        togglemark,     {0} },
+  { MODKEY,                       XK_slash,        swapfocus,      {0} },
+  { MODKEY,                       XK_at,           swapclient,     {0} },
 
 	/**** Multiple monitors ****/
 	{ MODKEY,                       XK_comma,        focusmon,       {.i = -1 } },
@@ -256,7 +255,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_o,            setlayout,      {.v = &layouts[11]} }, /* Tstack horiz */
 	{ MODKEY,                       XK_r,            setlayout,      {.v = &layouts[12]} }, /* Spiral */
 
-	{ MODKEY|ControlMask,		    XK_comma,        cyclelayout,    {.i = -1 } },
+	{ MODKEY|ControlMask,		        XK_comma,        cyclelayout,    {.i = -1 } },
 	{ MODKEY|ControlMask,           XK_period,       cyclelayout,    {.i = +1 } },
 
 	/**** Switching tags ****/
@@ -290,10 +289,10 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,           XK_d,            spawn,          {.v = roficalccmd } },
 	{ MODKEY,                       XK_Return,       spawn,          {.v = termcmd } },
 	{ ShiftMask|ControlMask,        XK_braceleft,    spawn,          {.v = flameshotcmd } },
-	{ 0,                            0xff61,           spawn,          {.v = flameshotcmd } },
-	{ MODKEY,                       0xff96,           spawn,          {.v = maintermcmd } },
-	{ MODKEY,                       0xff9d,           spawn,          {.v = nftermcmd } },
-	{ MODKEY,                       0xff98,           spawn,          {.v = filestermcmd } },
+	{ 0,                            0xff61,          spawn,          {.v = flameshotcmd } },
+	{ MODKEY,                       0xff96,          spawn,          {.v = maintermcmd } },
+	{ MODKEY,                       0xff9d,          spawn,          {.v = nftermcmd } },
+	{ MODKEY,                       0xff98,          spawn,          {.v = filestermcmd } },
 
 	/**** Misc ****/
 	{ MODKEY|ControlMask|ShiftMask, XK_c,            spawn,          {.v = roficlipboardcmd } },
