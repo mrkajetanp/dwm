@@ -2642,6 +2642,12 @@ tile(Monitor *m)
 	if (n == 0)
 		return;
 
+	if(n == 1){
+		c = nexttiled(m->clients);
+		resize(c, m->wx + m->gap->gappx, m->wy + m->gap->gappx, m->ww - 2 * c->bw - 2*m->gap->gappx, m->wh - 2 * c->bw - 2*m->gap->gappx, 0);
+		return;
+	}
+
 	if (n > m->nmaster)
 		mw = m->nmaster
 			? m->ww * (m->rmaster ? 1.0 - m->mfact : m->mfact)

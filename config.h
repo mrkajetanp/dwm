@@ -151,7 +151,9 @@ ResourcePref resources[] = {
 static const char *rofiruncmd[] = { "rofi", "-show", "run", "-font", "Noto Sans 12", "-theme", "slate-gruvbox", NULL };
 static const char *rofidruncmd[] = { "rofi", "-show", "drun", "-font", "Noto Sans 12", "-theme", "clean", NULL };
 static const char *roficalccmd[] = { "rofi", "-show", "calc", "-modi", "calc", "-no-show-match", "-no-sort", "-font", "Noto Sans 12", "-theme", "slate-gruvbox", NULL };
+
 static const char *termcmd[]  = { "alacritty", NULL };
+static const char *secondtermcmd[]  = { "st", NULL };
 
 static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
@@ -288,6 +290,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_d,            spawn,          {.v = rofiruncmd } },
 	{ MODKEY|ControlMask,           XK_d,            spawn,          {.v = roficalccmd } },
 	{ MODKEY,                       XK_Return,       spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_backslash,    spawn,          {.v = secondtermcmd } },
 	{ ShiftMask|ControlMask,        XK_braceleft,    spawn,          {.v = flameshotcmd } },
 	{ 0,                            0xff61,          spawn,          {.v = flameshotcmd } },
 	{ MODKEY,                       0xff96,          spawn,          {.v = maintermcmd } },
