@@ -171,6 +171,10 @@ static const char* rofiemojicmd[] = {"/home/kajetan/.bin/rofi-emoji", NULL};
 static const char* rofinmclicmd[] = {"/home/kajetan/.bin/rofi-nmcli", NULL};
 static const char* rofitrcmd[] = {"/home/kajetan/.bin/rofi-tr", NULL};
 
+static const char *kblayoutdefaultcmd[]  = { "/home/kajetan/.bin/kblayout", "default", NULL };
+static const char *kblayoutgamingcmd[]  = { "/home/kajetan/.bin/kblayout", "gaming", NULL };
+static const char *kblayoutgamingwasdcmd[]  = { "/home/kajetan/.bin/kblayout", "gaming", "wasdarrows", NULL };
+
 /* Brightness, volume & media commands */
 static const char *volumeupcmd[]  = { "pulsemixer", "--change-volume", "+10", NULL };
 static const char *volumedowncmd[]  = { "pulsemixer", "--change-volume", "-10", NULL };
@@ -304,6 +308,9 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_e,            spawn,          {.v = rofiemojicmd } },
 	{ MODKEY|ShiftMask,             XK_n,            spawn,          {.v = rofinmclicmd } },
 	{ MODKEY|ControlMask|ShiftMask, XK_t,            spawn,          {.v = rofitrcmd } },
+	{ MODKEY,                       XK_Prior,        spawn,          {.v = kblayoutdefaultcmd } },
+	{ MODKEY,                       XK_Next,         spawn,          {.v = kblayoutgamingcmd } },
+	{ MODKEY|ShiftMask,             XK_Next,         spawn,          {.v = kblayoutgamingwasdcmd } },
 
 	/**** Brightness, volume & media keys ****/
 	// Audio
