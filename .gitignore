@@ -3,5 +3,4 @@
 .ccls-cache/*
 dwm-msg
 dwm
-dwmc
 *.o
