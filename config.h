@@ -51,7 +51,7 @@ static const Inset default_inset = {
 };
 
 /* tagging */
-static const char *tags[] = { "", "", "", "", "ﱅ", "", "", "", "漣", "" };
+static const char *tags[] = { "", "", "", "", "ﱅ", "", "", "", "漣", "" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -106,10 +106,10 @@ static const MonitorRule monrules[] = {
 	// Main monitor
 	{  0,       1,   12,     -1,    -1,      -1,      -1     },
 	{  0,       2,   2,      -1,    -1,      -1,      -1     },
-	{  0,       4,   2,      -1,    -1,      -1,      -1     },
+	{  0,       4,   7,      -1,    -1,      -1,      -1     },
 	// Secondary monitor
-	{  1,       1,   8,      -1,    -1,      -1,      -1     },
-	{  1,       2,   3,      -1,    -1,      -1,      -1     },
+	{  1,       1,   12,      -1,    -1,      -1,      -1     },
+	{  1,       2,   12,      -1,    -1,      -1,      -1     },
 	// Default
 	{  -1,      -1,  0,      -1,    -1,      -1,      -1     },
 };
