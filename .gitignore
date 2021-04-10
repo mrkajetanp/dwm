@@ -1,6 +1,7 @@
 .ccls-cache/
 .ccls-cache
 .ccls-cache/*
+.cache/
 dwm-msg
 dwm
 *.o
