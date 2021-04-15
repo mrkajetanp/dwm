@@ -1,0 +1,4 @@
+If:                               # Apply this config conditionally
+  PathMatch: .*\.h                # to all headers...
+CompileFlags:                     # Tweak the parse settings
+  Add: [--include="config.h"]
