@@ -2,7 +2,7 @@
 #include <X11/XF86keysym.h>
 
 /* appearance */
-static unsigned int borderpx     = 3;        /* border pixel of windows */
+static unsigned int borderpx     = 0;        /* border pixel of windows */
 static unsigned int snap         = 32;       /* snap pixel */
 static int rmaster               = 0;        /* 1 means master-area is initially on the right */
 static int swallowfloating       = 0;        /* 1 means swallow floating windows by default */
