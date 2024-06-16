@@ -62,6 +62,7 @@ static const Rule rules[] = {
 	/* class              role     instance      title                           tags mask     isfloating   isterminal  noswallow  monitor   float x,y,w,h       fborder */
 	{ "Alacritty",        NULL,    NULL,         NULL,                           0,            0,           1,           0,        -1,        100, 100, 50, 50,    0},
 	{ "st-256color",      NULL,    NULL,         NULL,                           0,            0,           1,           0,        -1,        100, 100, 50, 50,    0},
+	{ "zoom",             NULL,    NULL,         NULL,                           0,            1,           0,           0,        -1 },
 	{ "Opera",            NULL,    NULL,         NULL,                           1 << 1,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
 	{ "Chromium",         NULL,    NULL,         NULL,                           1 << 1,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
 	{ "Firefox",          NULL,    NULL,         NULL,                           1 << 1,       0,           0,          -1,        -1 },
@@ -72,9 +73,11 @@ static const Rule rules[] = {
 	{ "tutanota-desktop", NULL,    NULL,         NULL,                           1 << 8,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
 	{ "Steam",            NULL,    NULL,         NULL,                           1 << 9,       0,           0,          -1,        -1 },
 	{ "Bitwarden",        NULL,    NULL,         NULL,                           1 << 9,       0,           0,           0,        -1,        -1,  -1,  -1, -1,    -1 },
+	{ "zoom",             NULL,    NULL,         NULL,                           0,            1,           0,           0,        -1,        100, 100, 50, 50,    0},
 	{ NULL,               NULL,    NULL,         "Android Emulator - Pixel:5554",0,            1,           0,           1,        -1 }, /* xev */
 	{ NULL,               NULL,    NULL,         "Event Tester",                 0,            0,           0,           1,        -1 }, /* xev */
 	{ "Dwarf_Fortress",   NULL,    NULL,         "Dwarf Fortress",               0,            0,           0,           1,        -1 },
+	{ "polkit-gnome-authentication-agent-1",     NULL,    NULL,         NULL,    0,            1,           0,           1,        -1 }, /* xev */
 };
 
 /* layout(s) */
@@ -213,7 +216,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_j,            pushdown,       { 0 } },
 	{ MODKEY|ShiftMask,             XK_k,            pushup,         { 0 } },
 	{ MODKEY,                       XK_s,            togglesticky,   {0} },
-	{ MODKEY,                       XK_dollar,       togglescratch,  {.v = scratchpadcmd } },
+	{ MODKEY|ShiftMask,             XK_s,            togglescratch,  {.v = scratchpadcmd } },
 	{ MODKEY|ControlMask,           XK_j,            inplacerotate,  {.i = +1} },
 	{ MODKEY|ControlMask,           XK_k,            inplacerotate,  {.i = -1} },
 	{ MODKEY|ControlMask,           XK_h,            inplacerotate,  {.i = +2} },
@@ -243,6 +246,12 @@ static Key keys[] = {
 	{ MODKEY,                       XK_period,       focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,        tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period,       tagmon,         {.i = +1 } },
+
+	{ MODKEY,                       XK_Left,        focusmon,       {.i = -1 } },
+	{ MODKEY,                       XK_Right,       focusmon,       {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_Left,        tagmon,         {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_Right,       tagmon,         {.i = +1 } },
+
 	{ MODKEY|ControlMask|ShiftMask, XK_comma,        tagallmon,      {.i = +1 } },
 	{ MODKEY|ControlMask|ShiftMask, XK_period,       tagallmon,      {.i = -1 } },
 
@@ -275,12 +284,24 @@ static Key keys[] = {
 	TAGKEYS(                        XK_parenright,                   7)
 	TAGKEYS(                        XK_plus,                         8)
 	TAGKEYS(                        XK_bracketright,                 9)
-	{ MODKEY,                       XK_Left,         viewtoleft,     {0} },
-	{ MODKEY,                       XK_Right,        viewtoright,    {0} },
-	{ MODKEY|ShiftMask,             XK_Left,         tagtoleft,      {0} },
-	{ MODKEY|ShiftMask,             XK_Right,        tagtoright,     {0} },
-	{ MODKEY,                       XK_numbersign,   view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_exclam,       tag,            {.ui = ~0 } },
+
+	TAGKEYS(                        XK_1,                    0)
+	TAGKEYS(                        XK_2,                  1)
+	TAGKEYS(                        XK_3,                    2)
+	TAGKEYS(                        XK_4,                   3)
+	TAGKEYS(                        XK_5,                    4)
+	TAGKEYS(                        XK_6,                        5)
+	TAGKEYS(                        XK_7,                     6)
+	TAGKEYS(                        XK_8,                   7)
+	TAGKEYS(                        XK_9,                         8)
+	TAGKEYS(                        XK_0,                 9)
+
+	// { MODKEY,                       XK_Left,         viewtoleft,     {0} },
+	// { MODKEY,                       XK_Right,        viewtoright,    {0} },
+	// { MODKEY|ShiftMask,             XK_Left,         tagtoleft,      {0} },
+	// { MODKEY|ShiftMask,             XK_Right,        tagtoright,     {0} },
+	// { MODKEY,                       XK_numbersign,   view,           {.ui = ~0 } },
+	// { MODKEY|ShiftMask,             XK_exclam,       tag,            {.ui = ~0 } },
 
 	/**** Killing and quitting ****/
 	{ MODKEY,                       XK_q,            killclient,     {0} },
